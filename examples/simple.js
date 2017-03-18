@@ -53,6 +53,11 @@ Promise.resolve()
                 handler: function (req, res) {
                     res.json(req.body);
                 }
+            },
+            'GET /test': function (req, res) {
+                res.json({
+                    text: 'yo!'
+                });
             }
         });
 

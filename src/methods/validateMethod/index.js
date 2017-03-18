@@ -1,6 +1,8 @@
 var joi = require('joi');
 
-var HttpError = require('../Error');
+var HttpError = require('../../Error');
+
+var prepare = require('./prepare');
 
 var createMethodSchema = function () {
     return joi.object()
@@ -29,6 +31,8 @@ var createMethodSchema = function () {
 module.exports = function (logger, config, httpParam, rawMethod) {
 
     return new Promise((resolve, reject) => {
+
+        rawMethod = prepare(logger, rawMethod);
 
         var methodSchema = createMethodSchema();
 
