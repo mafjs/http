@@ -3,22 +3,27 @@
 <!-- toc -->
 
 - [Http](#http)
-- [`constructor ([logger], [config])`](#constructor-logger-config)
-  - [config format](#config-format)
-- [`addMethod (http, method)`](#addmethod-http-method)
-- [`setEndpoint (endpoint)`](#setendpoint-endpoint)
-- [`init (app)`](#init-app)
+  - [`constructor ([logger], [config])`](#constructor-logger-config)
+  - [`addMethod (http, method)`](#addmethod-http-method)
+  - [`setEndpoint (endpoint)`](#setendpoint-endpoint)
+  - [`init (app)`](#init-app)
+- [MethodObject](#methodobject)
+- [HttpError](#httperror)
+  - [error codes on method creation](#error-codes-on-method-creation)
+  - [runtime error codes](#runtime-error-codes)
 
 <!-- tocstop -->
 
 ## Http
 
-## `constructor ([logger], [config])`
+
+
+### `constructor ([logger], [config])`
 
 - `logger` - Logger. Optional. logger should have trace and debug methods
 - `config` - Object. Optional
 
-### config format
+**config format**
 
 ```js
 {
@@ -27,10 +32,13 @@
 }
 ```
 
-## `addMethod (http, method)`
+
+
+
+### `addMethod (http, method)`
 
 - `http`   - Object.
-- `method` - MethodObject
+- `method` - [MethodObject](#methodobject)
 
 `http` format
 
@@ -43,8 +51,11 @@
 
 alternatively http can be String `GET /test:id`
 
+return `Promise`
 
-## `setEndpoint (endpoint)`
+
+
+### `setEndpoint (endpoint)`
 
 add endpoint info
 
@@ -62,6 +73,75 @@ if endpoint is object
 }
 ```
 
-## `init (app)`
+
+
+
+### `init (app)`
 
 add http routes to express app
+
+return `Promise`
+
+
+## MethodObject
+
+
+```js
+{
+    title: null,         // short method description
+    description: null,   // full method description
+
+    // joi schemas for every part of request
+    schema: {
+        path: joi.object(),
+        query: joi.object(),
+        body: joi.object(),
+        cookies: joi.object(),
+        headers: joi.object()
+    },
+
+    // express request handler function
+    handler: function (req, res) {
+
+    }
+}
+```
+
+**example**
+
+```js
+rest.addMethod('GET /test', {
+    title: null,
+    description: null,
+    schema: {
+        // ...
+    },
+    handler: function (req, res) {
+
+    }
+});
+```
+
+you can use short notation for MethodObject - only handler function
+
+```js
+rest.addMethod('GET /test', function (req, res) {
+    // ...
+});
+```
+
+
+## HttpError
+
+
+### error codes on method creation
+
+- `INVALID_HTTP_PARAM_OBJECT`
+- `INVALID_RESOURCE_OBJECT`
+- `INVALID_METHOD_OBJECT`
+- `INVALID_ARGS`
+
+
+### runtime error codes
+
+- `INVALID_ARGS`
