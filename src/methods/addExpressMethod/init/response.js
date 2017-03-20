@@ -2,7 +2,9 @@ module.exports = function (logger, middlewares, responseHelpers) {
 
     middlewares.push(function (req, res, next) {
 
-        res = Object.assign(res, responseHelpers);
+        for (var name in responseHelpers) {
+            res[name] = responseHelpers[name].bind(res);
+        }
 
         var send = res.send;
 
