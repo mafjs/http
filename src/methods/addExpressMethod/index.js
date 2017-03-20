@@ -19,6 +19,10 @@ module.exports = function (logger, config, responseHelpers, app, di, endpoint, m
 
         logger.debug(`add http method`, httpMethod, httpPath);
 
+        if (kindOf(method.schema) === 'undefined') {
+            method.schema = {};
+        }
+
         if (method.beforeMethodCreation) {
             method.beforeMethodCreation(method, di);
         }
