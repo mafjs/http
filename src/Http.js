@@ -38,6 +38,8 @@ class Http {
         this._methodInc = 0;
 
         this._methods = {};
+
+        this._beforeResponseMiddleware = null;
     }
 
     /**
@@ -175,6 +177,10 @@ class Http {
                     for (var i in expressMethods) {
                         var method = expressMethods[i];
 
+                        if (this._beforeResponseMiddleware) {
+                            method.args.push(this._beforeResponseMiddleware);
+                        }
+
                         app[method.httpMethod].apply(app, method.args);
                     }
                     resolve();
@@ -183,6 +189,12 @@ class Http {
 
         });
 
+    }
+
+    setBeforeResponseMiddleware (fn) {
+        // TODO validate and error
+        this._beforeResponseMiddleware = fn;
+        return this;
     }
 
     /**
