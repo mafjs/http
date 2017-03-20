@@ -14,7 +14,7 @@ module.exports = function (logger, middlewares, method) {
                     next();
                 })
                 .catch((originalError) => {
-                    var error = HttpError.createError(HttpError.CODES.INVALID_REQUEST_DATA, error);
+                    var error = HttpError.createError(HttpError.CODES.INVALID_REQUEST_DATA, originalError);
 
                     error.requestPart = 'headers';
                     error.details = originalError.details;
