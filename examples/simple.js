@@ -19,61 +19,69 @@ var config = {
     responseTimeout: 1000
 };
 
-var rest = new Http(logger, config);
+var http = new Http(logger, config);
 
-rest.setEndpoint('/api/v0');
+http.setEndpoint('/api/v0');
+
+http.responseHelpers.test = function (data) {
+    this.json({
+        test: data
+    });
+};
+
+var methods = {
+    'GET /test/:id': {
+        schema: {
+            path: joi.object().keys({
+                id: joi.number()
+            }),
+            query: joi.object().keys({
+                q: joi.number()
+            }),
+            cookies: joi.object().required().keys({
+                test: joi.number()
+            }),
+            headers: joi.object().unknown(true).keys({
+                auth: joi.string().valid(['100500'])
+            })
+        },
+        handler: function (req, res) {
+            res.json('GET');
+        }
+    },
+    'POST /test/:id': {
+        schema: {
+            body: joi.object().required().keys({
+                name: joi.number().required()
+            })
+        },
+        handler: function (req, res) {
+            res.json(req.body);
+        }
+    },
+    'GET /test': {
+        handler: function (req, res) {
+            res.time('test');
+
+            setTimeout(function () {
+                res.test({
+                    text: 'yo!'
+                });
+                res.timeEnd('test');
+            }, 100);
+
+        }
+    }
+};
 
 Promise.resolve()
     .then(() => {
 
-        return rest.addMethods({
-            'GET /test/:id': {
-                schema: {
-                    path: joi.object().keys({
-                        id: joi.number()
-                    }),
-                    query: joi.object().keys({
-                        q: joi.number()
-                    }),
-                    cookies: joi.object().required().keys({
-                        test: joi.number()
-                    }),
-                    headers: joi.object().unknown(true).keys({
-                        auth: joi.string().valid(['100500'])
-                    })
-                },
-                handler: function (req, res) {
-                    res.json('GET');
-                }
-            },
-            'POST /test/:id': {
-                schema: {
-                    body: joi.object().required().keys({
-                        name: joi.number().required()
-                    })
-                },
-                handler: function (req, res) {
-                    res.json(req.body);
-                }
-            },
-            'GET /test': {
-                handler: function (req, res) {
-                    res.time('test');
-
-                    setTimeout(function () {
-                        res.json({
-                            text: 'yo!'
-                        });
-                        res.timeEnd('test');
-                    }, 100);
-
-                }
-            }
-        });
+        return http.addMethods(methods);
 
     })
     .then(() => {
-        return rest.init(app);
+        return http.init(app);
     })
     .then(() => {
 

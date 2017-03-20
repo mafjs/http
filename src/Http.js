@@ -208,8 +208,6 @@ class Http {
 
         }
 
-        console.log('#######################', config);
-
         return config;
     }
 
