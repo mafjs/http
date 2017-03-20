@@ -1,6 +1,3 @@
-require('source-map-support').install();
-
-
 var kindOf = require('maf-kind-of');
 var HttpError = require('./Error');
 
@@ -9,6 +6,8 @@ var responseHelpers = require('./responseHelpers');
 var validateHttpParam = require('./methods/validateHttpParam');
 var validateMethod = require('./methods/validateMethod');
 var addExpressMethod = require('./methods/addExpressMethod');
+
+var expressMiddlewares = require('./expressMiddlewares');
 
 /**
  *
@@ -141,6 +140,8 @@ class Http {
         // app should be express app
 
         return new Promise((resolve, reject) => {
+
+            app.use(expressMiddlewares.requestId);
 
             if (this._config.responseTimeout) {
                 app.locals.responseTimeout = this._config.responseTimeout;

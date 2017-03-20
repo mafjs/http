@@ -1,3 +1,4 @@
+require('source-map-support').install();
 require('maf-error/initGlobal');
 
 var logger = require('log4js-nested').getLogger();
@@ -91,13 +92,14 @@ Promise.resolve()
     })
     .then(() => {
 
-        app.use(function (req, res, next) {
+        app.use(function (req, res) {
 
             res.requestEnd();
 
             var context = res.httpContext;
 
             context.body.debug = {
+                requestId: req.id,
                 time: context.time
             };
 

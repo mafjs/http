@@ -52,7 +52,8 @@
   "dependencies": {
     "joi": "10.2.x",
     "maf-error": "0.9.x",
-    "maf-kind-of": "0.1.x"
+    "maf-kind-of": "0.1.x",
+    "uuid": "3.0.x"
   },
   "nyc": {
     "all": true,
