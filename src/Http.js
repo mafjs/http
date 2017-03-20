@@ -134,9 +134,10 @@ class Http {
      * add rest methods to express app
      *
      * @param {Express} app
+     * @param {Object} di
      * @return {Promise}
      */
-    init (app) {
+    init (app, di) {
         // app should be express app
 
         return new Promise((resolve, reject) => {
@@ -157,6 +158,7 @@ class Http {
                         this._config,
                         this.responseHelpers,
                         app,
+                        di,
                         this._endpoint,
                         this._methods[i]
                     )

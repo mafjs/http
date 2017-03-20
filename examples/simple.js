@@ -40,15 +40,15 @@ var methods = {
             path: joi.object().keys({
                 id: joi.number()
             }),
-            query: joi.object().keys({
-                q: joi.number()
-            }),
             cookies: joi.object().required().keys({
                 test: joi.number()
             }),
             headers: joi.object().unknown(true).keys({
                 auth: joi.string().valid(['100500'])
             })
+        },
+        beforeMethodCreation: function (method, di) {
+            method.schema.query = di.testSchema;
         },
         handler: function (req, res) {
             res.json('GET');
@@ -88,11 +88,26 @@ Promise.resolve()
 
     })
     .then(() => {
-        return http.init(app);
+        return http.init(app, {
+            testSchema: joi.object().keys({
+                q: joi.number().required()
+            })
+        });
     })
     .then(() => {
 
         app.use(function (req, res) {
+
+            if (!res.httpContext) {
+
+                return res.status(404).json({
+                    error: {
+                        message: 'resource not found',
+                        code: 'RESOURCE_NOT_FOUND'
+                    }
+                });
+
+            }
 
             res.requestEnd();
 
@@ -133,7 +148,9 @@ Promise.resolve()
 
         });
 
-        app.listen(3003);
+        app.listen(3003, function () {
+            logger.info('listen on 3003');
+        });
     })
     .catch((error) => {
         logger.error(error);

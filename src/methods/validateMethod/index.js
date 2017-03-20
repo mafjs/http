@@ -24,7 +24,8 @@ var createMethodSchema = function () {
                     body: joi.object().keys({}),    // req.body
                     cookies: joi.object().keys({})  // req.cookies
                 }),
-            handler: joi.func().required()
+            handler: joi.func().required(),
+            beforeMethodCreation: joi.func()
         });
 };
 
