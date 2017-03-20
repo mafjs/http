@@ -38,9 +38,9 @@ module.exports = function (logger, config, responseHelpers, app, di, endpoint, m
             validation.body(logger, middlewares, method);
         }
 
-        init.handler(logger, app, httpMethod, httpPath, middlewares, method);
+        var expressMethod = init.handler(logger, app, httpMethod, httpPath, middlewares, method);
 
-        resolve(httpMethod);
+        resolve(expressMethod);
 
     });
 

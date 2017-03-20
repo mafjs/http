@@ -171,7 +171,12 @@ class Http {
             }
 
             Promise.all(promises)
-                .then(() => {
+                .then((expressMethods) => {
+                    for (var i in expressMethods) {
+                        var method = expressMethods[i];
+
+                        app[method.httpMethod].apply(app, method.args);
+                    }
                     resolve();
                 })
                 .catch(reject);

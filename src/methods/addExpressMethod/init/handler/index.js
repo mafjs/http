@@ -7,7 +7,9 @@ module.exports = function (logger, app, httpMethod, httpPath, middlewares, metho
 
     logger.debug('init request handler');
 
-    app[httpMethod](httpPath, middlewares, function (req, res, next) {
+    var args = [httpPath, middlewares];
+
+    args.push(function (req, res, next) {
 
         init.responseTimeout(logger, req, res, next, method);
 
@@ -25,5 +27,9 @@ module.exports = function (logger, app, httpMethod, httpPath, middlewares, metho
 
     });
 
+    return {
+        httpMethod: httpMethod,
+        args: args
+    };
 
 };
