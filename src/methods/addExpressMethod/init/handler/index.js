@@ -11,13 +11,13 @@ module.exports = function (logger, app, httpMethod, httpPath, middlewares, metho
 
         init.responseTimeout(logger, req, res, next, method);
 
-        res.httpContextNext = function () {
+        res.httpContextNext = function (error) {
 
             if (res.timeout) {
                 clearTimeout(res.timeout);
             }
 
-            next();
+            next(error);
 
         };
 
