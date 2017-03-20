@@ -1,3 +1,6 @@
+require('source-map-support').install();
+
+
 var kindOf = require('maf-kind-of');
 var HttpError = require('./Error');
 
@@ -135,6 +138,10 @@ class Http {
 
         return new Promise((resolve, reject) => {
 
+            if (this._config.responseTimeout) {
+                app.locals.responseTimeout = this._config.responseTimeout;
+            }
+
             var promises = [];
 
             for (var i in this._methods) {
@@ -190,10 +197,13 @@ class Http {
 
             return {
                 strictResourceValidation: false,
-                strictMethodValidation: false
+                strictMethodValidation: false,
+                responseTimeout: 1 * 60 * 1000 // 1 minutes
             };
 
         }
+
+        console.log('#######################', config);
 
         return config;
     }

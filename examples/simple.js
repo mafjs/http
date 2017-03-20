@@ -1,3 +1,5 @@
+require('maf-error/initGlobal');
+
 var logger = require('log4js-nested').getLogger();
 
 var joi = require('joi');
@@ -11,13 +13,13 @@ app.use(cookieParser());
 
 var bodyParser = require('body-parser');
 
-app.use(bodyParser.json(
-    {
-        type: '*/*'
-    }
-));
+app.use(bodyParser.json({type: '*/*'}));
 
-var rest = new Http(logger);
+var config = {
+    responseTimeout: 1000
+};
+
+var rest = new Http(logger, config);
 
 rest.setEndpoint('/api/v0');
 
@@ -55,9 +57,18 @@ Promise.resolve()
                 }
             },
             'GET /test': function (req, res) {
-                res.json({
-                    text: 'yo!'
-                });
+                res.time('test');
+
+                setTimeout(function () {
+                    res.json({
+                        text: 'yo!'
+                    });
+                    res.timeEnd('test');
+                }, 100);
+
+
+
+
             }
         });
 
@@ -82,14 +93,15 @@ Promise.resolve()
 
                 })
                 .else((error) => {
-                    logger.error(error);
-                    res.json({
+
+                    logger.error('#########', error);
+
+                    res.status(500).json({
                         error: 'Server Error'
                     });
+
                 })
                 .check();
-
-
 
         });
 

@@ -27,6 +27,8 @@
 
 ```js
 {
+    responseTimeout: 1000, // Number, default undefined
+
     /* not implemented */ strictResourceValidation: false,
     /* not implemented */ strictMethodValidation: false
 }
