@@ -1,8 +1,7 @@
-var responseHelpers = require('./responseHelpers');
-
-module.exports = function (logger, middlewares) {
+module.exports = function (logger, middlewares, responseHelpers) {
 
     middlewares.push(function (req, res, next) {
+
         res = Object.assign(res, responseHelpers);
 
         var send = res.send;
@@ -23,6 +22,7 @@ module.exports = function (logger, middlewares) {
         };
 
         next();
+
     });
 
 };

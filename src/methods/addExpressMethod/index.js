@@ -4,7 +4,7 @@ var validation = require('./validation');
 
 var init = require('./init');
 
-module.exports = function (logger, config, app, endpoint, method) {
+module.exports = function (logger, config, responseHelpers, app, endpoint, method) {
 
     return new Promise((resolve) => {
 
@@ -20,7 +20,7 @@ module.exports = function (logger, config, app, endpoint, method) {
         logger.debug(`add http method`, httpMethod, httpPath);
 
         init.httpContext(logger, middlewares);
-        init.response(logger, middlewares);
+        init.response(logger, middlewares, responseHelpers);
 
         if (kindOf(method.schema) === 'object') {
             validation.path(logger, middlewares, method);

@@ -4,6 +4,8 @@ require('source-map-support').install();
 var kindOf = require('maf-kind-of');
 var HttpError = require('./Error');
 
+var responseHelpers = require('./responseHelpers');
+
 var validateHttpParam = require('./methods/validateHttpParam');
 var validateMethod = require('./methods/validateMethod');
 var addExpressMethod = require('./methods/addExpressMethod');
@@ -22,6 +24,8 @@ class Http {
          * @type {HttpError}
          */
         this.Error = HttpError;
+
+        this.responseHelpers = responseHelpers;
 
         this._logger = this._validateLogger(logger);
         this._config = this._validateConfig(config);
@@ -150,6 +154,7 @@ class Http {
                     addExpressMethod(
                         this._logger,
                         this._config,
+                        this.responseHelpers,
                         app,
                         this._endpoint,
                         this._methods[i]
