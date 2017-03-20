@@ -1,6 +1,10 @@
 var HttpError = require('../../../../Error');
 
-var getResponseTimeoutDelay = function (req) {
+var getResponseTimeoutDelay = function (req, method) {
+    if (method.responseTimeout) {
+        return method.responseTimeout;
+    }
+
     if (req.app && req.app.locals && req.app.locals.responseTimeout) {
         return Number(req.app.locals.responseTimeout);
     } else {
@@ -8,9 +12,9 @@ var getResponseTimeoutDelay = function (req) {
     }
 };
 
-module.exports = function (logger, req, res, next) {
+module.exports = function (logger, req, res, next, method) {
 
-    var timeoutDelay = getResponseTimeoutDelay(req);
+    var timeoutDelay = getResponseTimeoutDelay(req, method);
 
     if (!timeoutDelay) {
         return;

@@ -13,6 +13,7 @@ var createMethodSchema = function () {
             name: joi.string(),
             title: joi.string(),
             description: joi.string(),
+            responseTimeout: joi.number().integer().min(1),
             schema: joi.object()
                 // this option can be changed with config.strictMethodValidation = true
                 .unknown(false)

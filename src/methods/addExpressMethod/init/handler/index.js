@@ -3,13 +3,13 @@ var init = {
 };
 
 
-module.exports = function (logger, app, httpMethod, httpPath, middlewares, handler) {
+module.exports = function (logger, app, httpMethod, httpPath, middlewares, method) {
 
     logger.debug('init request handler');
 
     app[httpMethod](httpPath, middlewares, function (req, res, next) {
 
-        init.responseTimeout(logger, req, res, next);
+        init.responseTimeout(logger, req, res, next, method);
 
         res.httpContextNext = function () {
 
@@ -21,7 +21,7 @@ module.exports = function (logger, app, httpMethod, httpPath, middlewares, handl
 
         };
 
-        handler(req, res, next);
+        method.handler(req, res, next);
 
     });
 

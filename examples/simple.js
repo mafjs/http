@@ -56,19 +56,18 @@ Promise.resolve()
                     res.json(req.body);
                 }
             },
-            'GET /test': function (req, res) {
-                res.time('test');
+            'GET /test': {
+                handler: function (req, res) {
+                    res.time('test');
 
-                setTimeout(function () {
-                    res.json({
-                        text: 'yo!'
-                    });
-                    res.timeEnd('test');
-                }, 100);
+                    setTimeout(function () {
+                        res.json({
+                            text: 'yo!'
+                        });
+                        res.timeEnd('test');
+                    }, 100);
 
-
-
-
+                }
             }
         });
 

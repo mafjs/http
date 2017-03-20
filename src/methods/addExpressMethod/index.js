@@ -30,7 +30,7 @@ module.exports = function (logger, config, app, endpoint, method) {
             validation.body(logger, middlewares, method);
         }
 
-        init.handler(logger, app, httpMethod, httpPath, middlewares, method.handler);
+        init.handler(logger, app, httpMethod, httpPath, middlewares, method);
 
         resolve(httpMethod);
 
