@@ -24,9 +24,13 @@ var http = new Http(logger, config);
 http.setEndpoint('/api/v0');
 
 http.responseHelpers.test = function (data) {
-    this.json({
+
+    this.httpContext.body = {
         test: data
-    });
+    };
+
+    this.httpContextNext();
+
 };
 
 var methods = {
@@ -64,10 +68,12 @@ var methods = {
             res.time('test');
 
             setTimeout(function () {
+                res.timeEnd('test');
+
                 res.test({
                     text: 'yo!'
                 });
-                res.timeEnd('test');
+
             }, 100);
 
         }
@@ -85,10 +91,23 @@ Promise.resolve()
     })
     .then(() => {
 
+        app.use(function (req, res, next) {
+
+            res.requestEnd();
+
+            var context = res.httpContext;
+
+            context.body.debug = {
+                time: context.time
+            };
+
+            res.json(context.body);
+        });
+
         app.use(function (error, req, res, next) {
 
             error.getCheckChain()
-                .ifCode(rest.Error.CODES.INVALID_REQUEST_DATA, (error) => {
+                .ifCode(http.Error.CODES.INVALID_REQUEST_DATA, (error) => {
 
                     res.status(400).json({
                         error: {

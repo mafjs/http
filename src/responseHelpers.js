@@ -1,4 +1,21 @@
 module.exports = {
+    // requestStart: function () {
+    //     this.httpContext.time.start = new Date();
+    // },
+
+    requestEnd: function () {
+        if (this.httpContext.time.end) {
+            return;
+        }
+
+        var start = this.httpContext.time.start;
+        var end = new Date();
+
+        this.httpContext.time.end = end;
+
+        this.httpContext.time.total = end.getTime() - start.getTime();
+    },
+
     time: function (name) {
         if (!name) {
             // TODO Error

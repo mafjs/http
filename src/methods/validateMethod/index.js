@@ -43,7 +43,7 @@ module.exports = function (logger, config, httpParam, rawMethod) {
             abortEarly: true
         };
 
-        logger.debug('validate method', httpParam, rawMethod);
+        logger.debug('validate method', httpParam);
 
         joi.validate(rawMethod, methodSchema, options, function (error, valid) {
 

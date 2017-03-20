@@ -62,7 +62,7 @@ class Http {
      */
     addMethod (rawHttp, rawMethod) {
 
-        this._logger.debug('addMethod', rawHttp, rawMethod);
+        this._logger.debug('addMethod', rawHttp);
 
         var http = null;
         var method = null;
@@ -117,7 +117,7 @@ class Http {
             var promises = [];
 
             for (var http in methods) {
-                this._logger.debug('addMethods => addMethod', http, methods[http]);
+                this._logger.debug('addMethods => addMethod', http);
                 promises.push(this.addMethod(http, methods[http]));
             }
 
