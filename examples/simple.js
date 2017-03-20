@@ -35,12 +35,17 @@ http.responseHelpers.test = function (data) {
 };
 
 var methods = {
+    'GET /test/count': {
+        handler: function (req, res) {
+            res.json({result: 100500});
+        }
+    },
     'GET /test/:id': {
         schema: {
             path: joi.object().keys({
                 id: joi.number()
             }),
-            cookies: joi.object().required().keys({
+            cookies: joi.object().required().unknown(true).keys({
                 test: joi.number()
             }),
             headers: joi.object().unknown(true).keys({

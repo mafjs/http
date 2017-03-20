@@ -35,7 +35,9 @@ class Http {
             path: null
         };
 
-        this._methods = [];
+        this._methodInc = 0;
+
+        this._methods = {};
     }
 
     /**
@@ -66,6 +68,8 @@ class Http {
         var http = null;
         var method = null;
 
+        var methodId = this._methodInc++;
+
         return Promise.resolve()
             .then(() => {
                 return validateHttpParam(this._logger, this._config, rawHttp);
@@ -80,7 +84,7 @@ class Http {
 
                 method.http = http;
 
-                this._methods.push(method);
+                this._methods[methodId] = method;
 
                 return true;
             });
@@ -150,7 +154,7 @@ class Http {
 
             var promises = [];
 
-            for (var i in this._methods) {
+            for (var id in this._methods) {
 
                 promises.push(
                     addExpressMethod(
@@ -160,7 +164,7 @@ class Http {
                         app,
                         di,
                         this._endpoint,
-                        this._methods[i]
+                        this._methods[id]
                     )
                 );
 
