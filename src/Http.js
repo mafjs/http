@@ -1,6 +1,7 @@
 var kindOf = require('maf-kind-of');
 var HttpError = require('./Error');
 
+var requestHelpers = require('./requestHelpers');
 var responseHelpers = require('./responseHelpers');
 
 var validateHttpParam = require('./methods/validateHttpParam');
@@ -24,6 +25,7 @@ class Http {
          */
         this.Error = HttpError;
 
+        this.requestHelpers = requestHelpers;
         this.responseHelpers = responseHelpers;
 
         this._logger = this._validateLogger(logger);
@@ -162,6 +164,7 @@ class Http {
                     addExpressMethod(
                         this._logger,
                         this._config,
+                        this.requestHelpers,
                         this.responseHelpers,
                         app,
                         di,

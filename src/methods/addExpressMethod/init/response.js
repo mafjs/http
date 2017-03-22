@@ -1,9 +1,13 @@
-module.exports = function (logger, middlewares, responseHelpers) {
+module.exports = function (logger, middlewares, requestHelpers, responseHelpers) {
 
     middlewares.push(function (req, res, next) {
 
-        for (var name in responseHelpers) {
-            res[name] = responseHelpers[name].bind(res);
+        for (var reqHelperName in requestHelpers) {
+            req[reqHelperName] = requestHelpers[reqHelperName].bind(req);
+        }
+
+        for (var resHelperName in responseHelpers) {
+            res[resHelperName] = responseHelpers[resHelperName].bind(res);
         }
 
         var send = res.send;
@@ -14,10 +18,10 @@ module.exports = function (logger, middlewares, responseHelpers) {
                 clearTimeout(res.timeout);
             }
 
-            if (res.headersSent) {
-                // TODO Error, warning
-                return;
-            }
+            // if (res.headersSent) {
+            //     // TODO Error, warning
+            //     return;
+            // }
 
             send.apply(res, arguments);
 

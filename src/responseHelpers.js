@@ -36,5 +36,19 @@ module.exports = {
         var start = this.httpContext.time[name].getTime();
 
         this.httpContext.time[name] = now - start;
-    }
+    },
+
+    // TODO check express and http.ServerResponse method conflicts
+    // alias for cookie()
+    // setCookie: function (name, value, options) {
+    //     return this.cookie(name, value, options);
+    // },
+    // alias for clearCookie
+    // deleteCookie: function (name, options) {
+    //     return this.clearCookie(name, options);
+    // }
+    // setHeader implemented in http.ServerResponse
+    // setHeader: function (name, value) {
+    //     return this.set(name, value);
+    // }
 };

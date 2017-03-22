@@ -37,6 +37,7 @@ http.responseHelpers.test = function (data) {
 var methods = {
     'GET /test/count': {
         handler: function (req, res) {
+            console.log(req.hasPathParam('test'));
             res.json({result: 100500});
         }
     },
