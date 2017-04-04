@@ -110,3 +110,63 @@ t.test('should reject HttpError code = INVALID_METHOD_OBJECT, if validation fail
             });
 
 });
+
+t.test('should call prepare method internally', function (t) {
+
+    var validateMethod = proxyquire(root + '/methods/validateMethod', {
+        joi: {
+            validate: function (value, schema, options, callback) {
+                callback(null, {a: 1});
+            }
+        },
+        prepare: function (/*logger, rawMethod*/) {
+            t.end();
+        }
+    });
+
+    var logger = {
+        debug: function () {},
+        trace: function () {}
+    };
+
+    return validateMethod(logger);
+
+});
+
+
+t.test('prepare method', function (t) {
+
+    t.test('should return object if raw is object', function (t) {
+        var logger = {};
+
+        var raw = {handler: 'this_is_function'};
+
+        var prepare = proxyquire(root + '/methods/validateMethod/prepare', {});
+
+        t.same(prepare(logger, raw), {handler: 'this_is_function'});
+
+        t.end();
+    });
+
+    t.test('should return object if raw is function', function (t) {
+        var logger = {
+            debug: function () {}
+        };
+
+        var raw = function () {};
+
+        var prepare = proxyquire(root + '/methods/validateMethod/prepare', {});
+
+        var result = prepare(logger, raw);
+
+        t.equal(Object.keys(result).length, 1);
+
+        t.type(result.handler, 'function');
+
+        t.end();
+    });
+
+    t.end();
+
+
+});
