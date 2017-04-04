@@ -102,6 +102,12 @@ return `Promise`
         headers: joi.object()
     },
 
+    responseTimeout: 500, // in ms
+
+    beforeMethodCreation: function (rawMethodObject, di) {
+        // here your can modify rawMethodObject schemas using di api object or etc
+    },
+
     // express request handler function
     handler: function (req, res) {
 
