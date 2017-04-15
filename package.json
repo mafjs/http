@@ -50,7 +50,7 @@
     "tap": "10.x"
   },
   "dependencies": {
-    "joi": "10.2.x",
+    "joi": "10.4.x",
     "lodash.get": "4.4.x",
     "lodash.has": "4.5.x",
     "lodash.pick": "4.4.x",
