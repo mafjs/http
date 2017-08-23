@@ -54,7 +54,7 @@
     "lodash.get": "4.4.x",
     "lodash.has": "4.5.x",
     "lodash.pick": "4.4.x",
-    "maf-error": "0.9.x",
+    "maf-error": "^1.1.0",
     "maf-kind-of": "0.1.x",
     "uuid": "3.0.x"
   },
