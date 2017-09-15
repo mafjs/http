@@ -4,9 +4,11 @@ var validation = require('./validation');
 
 var init = require('./init');
 
+// eslint-disable-next-line max-params, max-statements
 module.exports = function (logger, config, requestHelpers, responseHelpers, app, di, endpoint, method) {
 
-    return new Promise((resolve) => {
+    // eslint-disable-next-line max-params, max-statements
+    return new Promise((resolve, reject) => {
 
         var middlewares = [];
 
@@ -36,6 +38,34 @@ module.exports = function (logger, config, requestHelpers, responseHelpers, app,
             validation.cookies(logger, middlewares, method);
             validation.headers(logger, middlewares, method);
             validation.body(logger, middlewares, method);
+        }
+
+        if (typeof method.middlewares !== 'undefined') {
+
+            if (!Array.isArray(method.middlewares)) {
+                return reject(
+                    new Error(
+                        `${method.httpMethod} ${method.path} method.middlewares should be an array`
+                    )
+                );
+            }
+
+            logger.debug(`${method.httpMethod} ${method.path} add ${method.middlewares.length} middlewares`);
+
+            for (var i in method.middlewares) {
+                let middleware = method.middlewares[i];
+
+                if (typeof middleware !== 'function') {
+                    return reject(
+                        new Error(
+                            `${method.httpMethod} ${method.path} method.middlewares[${i}] should be a function`
+                        )
+                    );
+                }
+
+                middlewares.push(middleware);
+            }
+
         }
 
         var expressMethod = init.handler(logger, app, httpMethod, httpPath, middlewares, method);
