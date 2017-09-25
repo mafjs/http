@@ -41,7 +41,7 @@
     "body-parser": "^1.18.1",
     "cookie-parser": "^1.4.3",
     "eslint": "^4.7.1",
-    "express": "^4.15.4",
+    "express": "^4.15.5",
     "in-publish": "^2.0.0",
     "log4js-nested": "^1.0.1",
     "markdown-toc": "^1.1.0",
