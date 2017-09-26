@@ -13,17 +13,9 @@ module.exports = function (logger, middlewares) {
             body: undefined
         };
 
-        res.httpContextNext = function (error) {
+        res.httpContextNext = null;
 
-            if (res.timeout) {
-                clearTimeout(res.timeout);
-            }
-
-            next(error);
-
-        };
-
-        req.logger.trace({record: res.httpContext}, 'init res.httpContext and httpContextNext');
+        req.logger.trace('init res.httpContext');
 
         next();
     });
