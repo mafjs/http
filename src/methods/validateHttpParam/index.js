@@ -17,7 +17,7 @@ module.exports = function (logger, config, httpParam) {
 
     return new Promise((resolve, reject) => {
 
-        logger.debug('validate http param', httpParam);
+        logger.debug({record: httpParam}, 'validate http param');
 
         httpParam = prepare(logger, httpParam);
 

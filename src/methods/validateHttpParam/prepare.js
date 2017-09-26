@@ -11,7 +11,7 @@ module.exports = function (logger, raw) {
             path: raw.substring(firstSpacePosition + 1)
         };
 
-        logger.debug('parse http param string', raw, obj);
+        logger.trace({record: {raw, obj}}, 'parse http param string');
 
     }
 

@@ -13,15 +13,7 @@ module.exports = function (logger, app, httpMethod, httpPath, middlewares, metho
 
         init.responseTimeout(logger, req, res, next, method);
 
-        res.httpContextNext = function (error) {
-
-            if (res.timeout) {
-                clearTimeout(res.timeout);
-            }
-
-            next(error);
-
-        };
+        req.logger.trace(`call method handler for ${httpMethod.toUpperCase()} ${httpPath}`);
 
         method.handler(req, res, next);
 

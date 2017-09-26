@@ -5,9 +5,10 @@ var HttpError = require('../../../Error');
 module.exports = function (logger, middlewares, method) {
 
     if (method.schema.query) {
-        logger.trace('add query params validation for ', method.http);
+        logger.trace('add query params validation for ' + method.http);
 
         middlewares.push(function (req, res, next) {
+            req.logger.trace({record: req.query}, 'validate query params');
             validate(req.query, method.schema.query)
                 .then((valid) => {
                     req.query = valid;

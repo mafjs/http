@@ -43,7 +43,7 @@
     "eslint": "^4.7.1",
     "express": "^4.15.4",
     "in-publish": "^2.0.0",
-    "log4js-nested": "^1.0.1",
+    "maf-logger": "^0.6.1",
     "markdown-toc": "^1.1.0",
     "proxyquire": "^1.8.0",
     "source-map-support": "^0.4.18",

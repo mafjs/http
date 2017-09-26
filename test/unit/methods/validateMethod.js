@@ -150,7 +150,9 @@ t.test('prepare method', function (t) {
 
     t.test('should return object if raw is function', function (t) {
         var logger = {
-            debug: function () {}
+            debug: () => {},
+            trace: () => {},
+            getLogger: () => this
         };
 
         var raw = function () {};

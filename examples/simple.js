@@ -1,7 +1,8 @@
 require('source-map-support').install();
 require('maf-error/initGlobal');
 
-var logger = require('log4js-nested').getLogger();
+var logger = require('maf-logger').create('http-example');
+logger.level('trace');
 
 var joi = require('joi');
 var Http = require('../package/Http');
@@ -41,50 +42,50 @@ var methods = {
             res.json({result: 100500});
         }
     },
-    'GET /test/:id': {
-        schema: {
-            path: joi.object().keys({
-                id: joi.number()
-            }),
-            cookies: joi.object().required().unknown(true).keys({
-                test: joi.number()
-            }),
-            headers: joi.object().unknown(true).keys({
-                auth: joi.string().valid(['100500'])
-            })
-        },
-        beforeMethodCreation: function (method, di) {
-            method.schema.query = di.testSchema;
-        },
-        handler: function (req, res) {
-            res.json('GET');
-        }
-    },
-    'POST /test/:id': {
-        schema: {
-            body: joi.object().required().keys({
-                name: joi.number().required()
-            })
-        },
-        handler: function (req, res) {
-            res.json(req.body);
-        }
-    },
-    'GET /test': {
-        handler: function (req, res) {
-            res.time('test');
-
-            setTimeout(function () {
-                res.timeEnd('test');
-
-                res.test({
-                    text: 'yo!'
-                });
-
-            }, 100);
-
-        }
-    }
+    // 'GET /test/:id': {
+    //     schema: {
+    //         path: joi.object().keys({
+    //             id: joi.number()
+    //         }),
+    //         cookies: joi.object().required().unknown(true).keys({
+    //             test: joi.number()
+    //         }),
+    //         headers: joi.object().unknown(true).keys({
+    //             auth: joi.string().valid(['100500'])
+    //         })
+    //     },
+    //     beforeMethodCreation: function (method, di) {
+    //         method.schema.query = di.testSchema;
+    //     },
+    //     handler: function (req, res) {
+    //         res.json('GET');
+    //     }
+    // },
+    // 'POST /test/:id': {
+    //     schema: {
+    //         body: joi.object().required().keys({
+    //             name: joi.number().required()
+    //         })
+    //     },
+    //     handler: function (req, res) {
+    //         res.json(req.body);
+    //     }
+    // },
+    // 'GET /test': {
+    //     handler: function (req, res) {
+    //         res.time('test');
+    //
+    //         setTimeout(function () {
+    //             res.timeEnd('test');
+    //
+    //             res.test({
+    //                 text: 'yo!'
+    //             });
+    //
+    //         }, 100);
+    //
+    //     }
+    // }
 };
 
 Promise.resolve()
@@ -124,7 +125,7 @@ Promise.resolve()
                 time: context.time
             };
 
-            res.json(context.body);
+            res.send(context.body);
         });
 
         app.use(function (error, req, res, next) {

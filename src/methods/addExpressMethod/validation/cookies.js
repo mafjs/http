@@ -5,9 +5,11 @@ var HttpError = require('../../../Error');
 module.exports = function (logger, middlewares, method) {
 
     if (method.schema.cookies) {
-        logger.trace('add cookies validation for ', method.http);
+        logger.trace('add cookies validation for ' + method.http);
 
         middlewares.push(function (req, res, next) {
+            req.logger.trace({record: req.cookies}, 'validate cookies');
+
             validate(req.cookies, method.schema.cookies)
                 .then((valid) => {
                     req.cookies = valid;

@@ -8,8 +8,9 @@ t.test('should return object if value object', function (t) {
     var fn = proxyquire(root + '/methods/validateHttpParam/prepare', {});
 
     var logger = {
-        debug: function () {},
-        trace: function () {}
+        debug: () => {},
+        trace: () => {},
+        getLogger: () => this
     };
 
     var obj = {
@@ -26,7 +27,9 @@ t.test('should return httpParam object if value string', function (t) {
     var fn = proxyquire(root + '/methods/validateHttpParam/prepare', {});
 
     var logger = {
-        debug: function () {}
+        debug: () => {},
+        trace: () => {},
+        getLogger: () => this
     };
 
     t.same(fn(logger, 'GET /test/:id'), {
@@ -43,7 +46,9 @@ t.test('should split string only by first space', function (t) {
     var fn = proxyquire(root + '/methods/validateHttpParam/prepare', {});
 
     var logger = {
-        debug: function () {}
+        debug: () => {},
+        trace: () => {},
+        getLogger: () => this
     };
 
     t.same(fn(logger, 'GET /test /:id'), {

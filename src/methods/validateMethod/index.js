@@ -18,11 +18,11 @@ var createMethodSchema = function () {
                 // this option can be changed with config.strictMethodValidation = true
                 .unknown(false)
                 .keys({
-                    path: joi.object(),             // every object here should be a joi schema object
-                    query: joi.object().keys({}),   // req.query
+                    path: joi.object(), // every object here should be a joi schema object
+                    query: joi.object().keys({}), // req.query
                     headers: joi.object().keys({}), // req.headers
-                    body: joi.object().keys({}),    // req.body
-                    cookies: joi.object().keys({})  // req.cookies
+                    body: joi.object().keys({}), // req.body
+                    cookies: joi.object().keys({}) // req.cookies
                 }),
             handler: joi.func().required(),
             beforeMethodCreation: joi.func()
@@ -44,7 +44,7 @@ module.exports = function (logger, config, httpParam, rawMethod) {
             abortEarly: true
         };
 
-        logger.debug('validate method', httpParam);
+        logger.debug({record: httpParam}, 'validate method');
 
         joi.validate(rawMethod, methodSchema, options, function (error, valid) {
 
@@ -54,7 +54,7 @@ module.exports = function (logger, config, httpParam, rawMethod) {
                         HttpError.CODES.INVALID_METHOD_OBJECT,
                         error
                     )
-                    .bind(httpParam)
+                        .bind(httpParam)
                 );
 
             }

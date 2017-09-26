@@ -17,8 +17,11 @@ module.exports = function (logger, req, res, next, method) {
     var timeoutDelay = getResponseTimeoutDelay(req, method);
 
     if (!timeoutDelay) {
+        req.logger.trace('no response timeout');
         return;
     }
+
+    req.logger.trace({record: timeoutDelay}, 'init response timeout');
 
     res.timeout = setTimeout(function () {
 

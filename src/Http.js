@@ -29,6 +29,7 @@ class Http {
         this.responseHelpers = responseHelpers;
 
         this._logger = this._validateLogger(logger);
+        this._prepareLogger = this._logger.getLogger('prepare');
         this._config = this._validateConfig(config);
 
         this._endpoint = {
@@ -50,6 +51,8 @@ class Http {
      * @param {String|Object} endpoint
      */
     setEndpoint (endpoint) {
+        this._prepareLogger.debug({record: endpoint}, 'setEndpoint');
+
         // TODO validate endpoint
         if (kindOf(endpoint) === 'string') {
             this._endpoint.path = endpoint;
@@ -67,7 +70,7 @@ class Http {
      */
     addMethod (rawHttp, rawMethod) {
 
-        this._logger.debug('addMethod', rawHttp);
+        this._prepareLogger.debug({record: rawHttp}, 'addMethod');
 
         var http = null;
         var method = null;
@@ -76,12 +79,12 @@ class Http {
 
         return Promise.resolve()
             .then(() => {
-                return validateHttpParam(this._logger, this._config, rawHttp);
+                return validateHttpParam(this._prepareLogger, this._config, rawHttp);
             })
             .then((validHttp) => {
                 http = validHttp;
 
-                return validateMethod(this._logger, this._config, http, rawMethod);
+                return validateMethod(this._prepareLogger, this._config, http, rawMethod);
             })
             .then((validMethod) => {
                 method = validMethod;
@@ -104,7 +107,7 @@ class Http {
 
         return new Promise((resolve, reject) => {
 
-            this._logger.debug('addMethods', methods);
+            this._prepareLogger.debug({record: Object.keys(methods)}, 'addMethods');
 
             var methodsParamType = kindOf(methods);
 
@@ -124,7 +127,7 @@ class Http {
             var promises = [];
 
             for (var http in methods) {
-                this._logger.debug('addMethods => addMethod', http);
+                this._prepareLogger.trace({record: http}, 'addMethods => addMethod');
                 promises.push(this.addMethod(http, methods[http]));
             }
 
@@ -150,7 +153,9 @@ class Http {
 
         return new Promise((resolve, reject) => {
 
-            app.use(expressMiddlewares.requestId);
+            this._logger.debug('init');
+
+            app.use(expressMiddlewares.requestId(this._logger));
 
             if (this._config.responseTimeout) {
                 app.locals.responseTimeout = this._config.responseTimeout;
@@ -195,6 +200,7 @@ class Http {
     }
 
     setBeforeResponseMiddleware (fn) {
+        this._logger.debug('setBeforeResponseMiddleware');
         // TODO validate and error
         this._beforeResponseMiddleware = fn;
         return this;

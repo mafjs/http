@@ -5,9 +5,11 @@ var HttpError = require('../../../Error');
 module.exports = function (logger, middlewares, method) {
 
     if (method.schema.path) {
-        logger.trace('add path params validation for ', method.http);
+        logger.trace('add path params validation for ' + method.http);
 
         middlewares.push(function (req, res, next) {
+            req.logger.trace({record: req.params}, 'validate path params');
+
             validate(req.params, method.schema.path)
                 .then((valid) => {
                     req.params = valid;

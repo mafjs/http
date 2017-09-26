@@ -19,7 +19,7 @@ module.exports = function (logger, config, requestHelpers, responseHelpers, app,
             httpPath = endpoint.path + httpPath;
         }
 
-        logger.debug(`add http method`, httpMethod, httpPath);
+        logger.debug({record: {httpMethod, httpPath}}, `add http method`);
 
         if (kindOf(method.schema) === 'undefined') {
             method.schema = {};
