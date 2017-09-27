@@ -1,7 +1,5 @@
-module.exports = function (logger, raw) {
-
+module.exports = function prepareMethod(logger, raw) {
     if (typeof raw === 'function') {
-
         logger.trace('rawMethod is function, make object with handler');
 
         return {
@@ -10,5 +8,4 @@ module.exports = function (logger, raw) {
     }
 
     return raw;
-
 };
