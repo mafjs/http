@@ -13,7 +13,7 @@ const createHttpParamSchema = function createHttpParamSchema() {
 
 module.exports = function validateHttpParam(logger, config, rawHttpParam) {
     return new Promise((resolve, reject) => {
-        logger.debug({ record: rawHttpParam }, 'validate http param');
+        logger.trace({ record: rawHttpParam }, 'validate http param');
 
         const httpParam = prepare(logger, rawHttpParam);
 
@@ -29,7 +29,7 @@ module.exports = function validateHttpParam(logger, config, rawHttpParam) {
             if (error) {
                 return reject(HttpError.createError(
                     HttpError.CODES.INVALID_HTTP_PARAM_OBJECT,
-                    error,
+                    error
                 ));
             }
 

@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@maf/eslint-config@0.3.3":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@maf/eslint-config/-/eslint-config-0.3.3.tgz#c61aa7e683a16767dcde534ced43734a6ee4e706"
+"@maf/eslint-config@0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@maf/eslint-config/-/eslint-config-0.3.4.tgz#82e29de3d3a63f2de93d345586f08cd103b037e0"
   dependencies:
     babel-eslint "^8.0.0"
     eslint "^4.7.2"

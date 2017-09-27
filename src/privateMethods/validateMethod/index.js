@@ -15,10 +15,7 @@ const createMethodSchema = function createMethodSchema() {
                 name: joi.string(),
                 title: joi.string(),
                 description: joi.string(),
-                responseTimeout: joi
-                    .number()
-                    .integer()
-                    .min(1),
+                timeout: joi.number().integer().min(1),
                 schema: joi.object()
                     // this option can be changed with config.strictMethodValidation = true
                     .unknown(false)
@@ -49,7 +46,7 @@ module.exports = function validateMethod(logger, config, httpParam, raw) {
             abortEarly: true
         };
 
-        logger.debug({ record: httpParam }, 'validate method');
+        logger.trace({ record: httpParam }, 'validate method');
 
         joi.validate(rawMethod, methodSchema, options, (error, valid) => {
             if (error) {

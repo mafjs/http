@@ -4,10 +4,21 @@ const HttpError = require('./Error');
 const validateConfig = require('./privateMethods/validateConfig');
 const validateHttpParam = require('./privateMethods/validateHttpParam');
 const validateMethod = require('./privateMethods/validateMethod');
+const createExpressMethod = require('./privateMethods/createExpressMethod');
+
+const helpers = require('./helpers');
+const middlewares = require('./middlewares');
 
 class Http {
+    /**
+     * @param {logger} logger
+     * @param {Object} config
+     */
     constructor(logger, config) {
         this.Error = HttpError;
+
+        this.requestHelpers = helpers.request;
+        this.responseHelpers = helpers.response;
 
         this._logger = logger;
 
@@ -42,6 +53,13 @@ class Http {
         }
     }
 
+    setBeforeResponseMiddleware(fn) {
+        this._logger.debug('setBeforeResponseMiddleware');
+        // TODO validate and error
+        this._beforeResponseMiddleware = fn;
+        return this;
+    }
+
     /**
      * add rest method
      *
@@ -55,7 +73,8 @@ class Http {
         let http = null;
         let method = null;
 
-        const methodId = this._methodInc + 1;
+        this._methodInc += 1;
+        const methodId = this._methodInc;
 
         return Promise.resolve()
             .then(() => validateHttpParam(this._logger, this._config, rawHttp))
@@ -109,6 +128,62 @@ class Http {
                     resolve();
                 })
                 .catch(reject);
+        });
+    }
+
+    /**
+     * @param {Express} app express app
+     * @param {Object} di
+     * @return {Promise}
+     */
+    init(app, di) {
+        return new Promise((resolve, reject) => {
+            this._logger.debug('init');
+
+            app.use(middlewares.requestId(this._logger));
+
+            // TODO
+            if (this._config.responseTimeout) {
+                // eslint-disable-next-line no-param-reassign
+                app.locals.responseTimeout = this._config.responseTimeout;
+            }
+
+            const promises = [];
+
+            Object.keys(this._methods).forEach((id) => {
+                const methodPromise = createExpressMethod(
+                    this._logger,
+                    this._config,
+                    this.requestHelpers,
+                    this.responseHelpers,
+                    app,
+                    di,
+                    this._endpoint,
+                    this._methods[id]
+                );
+
+                promises.push(methodPromise);
+            });
+
+            Promise.all(promises)
+                .then((methods) => {
+                    Object.keys(methods).forEach((i) => {
+                        const method = methods[i];
+
+                        if (this._beforeResponseMiddleware) {
+                            method.middlewares.push(this._beforeResponseMiddleware);
+                        }
+
+                        this._logger.trace(`add express method for ${method.httpMethod.toUpperCase()} ${method.route}`);
+
+                        app[method.httpMethod](method.route, method.middlewares);
+                    });
+
+                    resolve(app);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
         });
     }
 }
