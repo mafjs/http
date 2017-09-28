@@ -13,7 +13,7 @@ const getResponseTimeoutDelay = function getResponseTimeoutDelay(req, timeout) {
 };
 
 module.exports = function initMiddlewareResponseTimeout(logger, timeout) {
-    logger.info('add res.timeout middleware');
+    logger.trace('add res.timeout middleware');
 
     return function middlewareResponseTimeout(req, res, next) {
         const timeoutDelay = getResponseTimeoutDelay(req, timeout);
@@ -37,5 +37,7 @@ module.exports = function initMiddlewareResponseTimeout(logger, timeout) {
 
             return next(error);
         }, timeoutDelay);
+
+        next();
     };
 };

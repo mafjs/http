@@ -4,7 +4,7 @@ module.exports = function createMiddlewareInitResCtx(logger) {
     return function initResCtx(req, res, next) {
         res.ctx = {
             time: {
-                start: new Date(),
+                start: req.startTime || new Date(),
                 end: null,
                 total: null
             },
@@ -14,7 +14,7 @@ module.exports = function createMiddlewareInitResCtx(logger) {
             body: null
         };
 
-        req.logger.trace('res.ctx inited');
+        req.logger.trace({ record: res.ctx }, 'init res.ctx');
 
         next();
     };

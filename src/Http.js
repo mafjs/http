@@ -186,6 +186,22 @@ class Http {
                 });
         });
     }
+
+
+    createBasicMiddlewareNotFound() {
+        this._logger.trace('create basicMiddlewareNotFound');
+        return middlewares.basicNotFound;
+    }
+
+    createBasicMiddlewareSend() {
+        this._logger.trace('create basicMiddlewareSend');
+        return middlewares.basicSend;
+    }
+
+    createBasicMiddlewareError() {
+        this._logger.trace('create basicMiddlewareError');
+        return middlewares.basicError;
+    }
 }
 
 module.exports = Http;

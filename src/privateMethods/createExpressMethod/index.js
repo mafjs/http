@@ -1,7 +1,9 @@
 const kindOf = require('maf-kind-of');
 
+const initStartTime = require('./initStartTime');
 const initResponseTimeout = require('./initResponseTimeout');
 const initReq = require('./initReq');
+const initReqDi = require('./initReqDi');
 const initRes = require('./initRes');
 const initResCtx = require('./initResCtx');
 
@@ -60,8 +62,10 @@ module.exports = function createExpressMethod(
             method.beforeMethodCreation(method, di);
         }
 
+        method.middlewares.push(initStartTime(logger));
         method.middlewares.push(initResponseTimeout(logger, rawMethod.timeout));
         method.middlewares.push(initReq(logger, requestHelpers));
+        method.middlewares.push(initReqDi(logger, di));
         method.middlewares.push(initRes(logger, responseHelpers));
         method.middlewares.push(initResCtx(logger));
 

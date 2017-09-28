@@ -11,7 +11,8 @@
         "postversion": "git push origin && git push --tags",
         "toc": "node ./build/docToc.js",
         "lint": "eslint -c .eslintrc.js --ignore-path .gitignore ./src",
-        "lint:fix": "npm run lint -- --fix"
+        "lint:fix": "npm run lint -- --fix",
+        "dev": "nodemon ./examples/simple | bunyan"
     },
     "engines": {
         "node": ">=6"

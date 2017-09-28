@@ -4,16 +4,16 @@ module.exports = {
     // },
 
     requestEnd(/* next */) {
-        if (this.httpContext.time.end) {
+        if (this.ctx.time.end) {
             return;
         }
 
-        const { start } = this.httpContext.time;
+        const { start } = this.ctx.time;
         const end = new Date();
 
-        this.httpContext.time.end = end;
+        this.ctx.time.end = end;
 
-        this.httpContext.time.total = end.getTime() - start.getTime();
+        this.ctx.time.total = end.getTime() - start.getTime();
     },
 
     time(next, name) {
@@ -22,20 +22,20 @@ module.exports = {
             return;
         }
 
-        this.httpContext.time[name] = new Date();
+        this.ctx.time[name] = new Date();
     },
 
     timeEnd(next, name) {
-        if (!this.httpContext.time[name]) {
+        if (!this.ctx.time[name]) {
             // TODO ERROR
             return;
         }
 
         const now = (new Date()).getTime();
 
-        const start = this.httpContext.time[name].getTime();
+        const start = this.ctx.time[name].getTime();
 
-        this.httpContext.time[name] = now - start;
+        this.ctx.time[name] = now - start;
     }
 
     // TODO check express and http.ServerResponse method conflicts
