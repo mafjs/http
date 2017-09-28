@@ -3,6 +3,11 @@
     "version": "0.8.1",
     "description": "http handling",
     "main": "index.js",
+    "files": [
+        "index.js",
+        "joi.js",
+        "src"
+    ],
     "scripts": {
         "clean": "rm -rf package coverage .nyc_output npm-debug.log",
         "__test": "tap test/unit -J --coverage",
