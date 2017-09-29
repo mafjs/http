@@ -1,67 +1,67 @@
 {
-    "name": "maf-http",
-    "version": "0.9.0-beta.6",
-    "description": "http handling",
-    "main": "index.js",
-    "files": [
-        "index.js",
-        "joi.js",
-        "Error.js",
-        "src"
-    ],
-    "scripts": {
-        "clean": "rm -rf package coverage .nyc_output npm-debug.log",
-        "__test": "tap test/unit -J --coverage",
-        "test:fast": "tap test/unit -J",
-        "test:cov": "npm test -- --coverage-report=html",
-        "postversion": "git push origin && git push --tags",
-        "toc": "node ./build/docToc.js",
-        "lint": "eslint -c .eslintrc.js --ignore-path .gitignore ./src",
-        "lint:fix": "npm run lint -- --fix",
-        "dev": "nodemon ./examples/simple | bunyan"
-    },
-    "engines": {
-        "node": ">=6"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/mafjs/http.git"
-    },
-    "keywords": [
-        "maf"
-    ],
-    "author": "alekzonder <alekzonder@gmail.com>",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/mafjs/http/issues"
-    },
-    "homepage": "https://github.com/mafjs/http#readme",
-    "devDependencies": {
-        "@maf/eslint-config": "0.3.7",
-        "body-parser": "^1.18.2",
-        "cookie-parser": "^1.4.3",
-        "express": "^4.16.0",
-        "in-publish": "^2.0.0",
-        "maf-logger": "^0.6.1",
-        "markdown-toc": "^1.2.0",
-        "proxyquire": "^1.8.0",
-        "source-map-support": "^0.4.18",
-        "tap": "^10.7.2"
-    },
-    "dependencies": {
-        "joi": "^11.1.1",
-        "lodash.get": "^4.4.2",
-        "lodash.has": "^4.5.2",
-        "lodash.pick": "^4.4.0",
-        "maf-error": "^1.2.0",
-        "maf-kind-of": "^0.1.0",
-        "uuid": "^3.1.0"
-    },
-    "nyc": {
-        "all": true,
-        "include": [
-            "src/*.js",
-            "src/methods/**/*.js"
-        ]
-    }
+  "name": "maf-http",
+  "version": "0.9.0",
+  "description": "http handling",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "joi.js",
+    "Error.js",
+    "src"
+  ],
+  "scripts": {
+    "clean": "rm -rf package coverage .nyc_output npm-debug.log",
+    "__test": "tap test/unit -J --coverage",
+    "test:fast": "tap test/unit -J",
+    "test:cov": "npm test -- --coverage-report=html",
+    "postversion": "git push origin && git push --tags",
+    "toc": "node ./build/docToc.js",
+    "lint": "eslint -c .eslintrc.js --ignore-path .gitignore ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "dev": "nodemon ./examples/simple | bunyan"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mafjs/http.git"
+  },
+  "keywords": [
+    "maf"
+  ],
+  "author": "alekzonder <alekzonder@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mafjs/http/issues"
+  },
+  "homepage": "https://github.com/mafjs/http#readme",
+  "devDependencies": {
+    "@maf/eslint-config": "0.3.7",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.0",
+    "in-publish": "^2.0.0",
+    "maf-logger": "^0.6.1",
+    "markdown-toc": "^1.2.0",
+    "proxyquire": "^1.8.0",
+    "source-map-support": "^0.4.18",
+    "tap": "^10.7.2"
+  },
+  "dependencies": {
+    "joi": "^11.1.1",
+    "lodash.get": "^4.4.2",
+    "lodash.has": "^4.5.2",
+    "lodash.pick": "^4.4.0",
+    "maf-error": "^1.2.0",
+    "maf-kind-of": "^0.1.0",
+    "uuid": "^3.1.0"
+  },
+  "nyc": {
+    "all": true,
+    "include": [
+      "src/*.js",
+      "src/methods/**/*.js"
+    ]
+  }
 }
