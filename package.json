@@ -41,7 +41,7 @@
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "eslint": "^4.7.2",
-    "express": "^4.15.5",
+    "express": "^4.16.0",
     "in-publish": "^2.0.0",
     "maf-logger": "^0.6.1",
     "markdown-toc": "^1.2.0",
