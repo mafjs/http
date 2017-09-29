@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@maf/eslint-config@0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@maf/eslint-config/-/eslint-config-0.3.5.tgz#f20b21dba31ac88bff735efdad2b102b6ead93d5"
+"@maf/eslint-config@0.3.7":
+  version "0.3.7"
+  resolved "https://registry.yarnpkg.com/@maf/eslint-config/-/eslint-config-0.3.7.tgz#0b72edd12a7e090ca209f78f7b52baa0c91db83e"
   dependencies:
     babel-eslint "^8.0.0"
     eslint "^4.7.2"
@@ -574,8 +574,8 @@ core-util-is@1.0.2, core-util-is@~1.0.0:
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
 
 coveralls@^2.11.2:
-  version "2.13.1"
-  resolved "https://registry.yarnpkg.com/coveralls/-/coveralls-2.13.1.tgz#d70bb9acc1835ec4f063ff9dac5423c17b11f178"
+  version "2.13.3"
+  resolved "https://registry.yarnpkg.com/coveralls/-/coveralls-2.13.3.tgz#9ad7c2ae527417f361e8b626483f48ee92dd2bc7"
   dependencies:
     js-yaml "3.6.1"
     lcov-parse "0.0.10"
@@ -727,8 +727,8 @@ escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.3, escape-string-regexp@^
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
 
 eslint-config-airbnb-base@^12.0.0:
-  version "12.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-airbnb-base/-/eslint-config-airbnb-base-12.0.0.tgz#99063aaef4b8698083481a00e165cbe15e82d615"
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/eslint-config-airbnb-base/-/eslint-config-airbnb-base-12.0.1.tgz#abaca7b4536faa7e094add5a9801970fefdd39a4"
   dependencies:
     eslint-restricted-globals "^0.1.1"
 
