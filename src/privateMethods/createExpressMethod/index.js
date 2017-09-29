@@ -81,8 +81,9 @@ module.exports = function createExpressMethod(
             logger.debug(`${method.httpMethod} ${method.route} add ${rawMethod.middlewares.length} middlewares`);
 
             Object.keys(rawMethod.middlewares).forEach((i) => {
+                const middleware = rawMethod.middlewares[i];
                 if (typeof middleware !== 'function') {
-                    return reject(new Error(`${method.httpMethod} ${method.route} method.middlewares[${i}] should be a function`));
+                    return reject(new Error(`${method.httpMethod} ${method.route} method.middlewares[${i}] should be a function, got ${typeof middleware}`));
                 }
 
                 return method.middlewares.push(rawMethod.middlewares[i]);
