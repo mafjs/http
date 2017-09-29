@@ -7,11 +7,12 @@ module.exports = function initMiddlewareQueryValidation(logger, middlewares, sch
         logger.trace('add path params validation middleware');
 
         middlewares.push((req, res, next) => {
-            req.logger.trace({ record: req.params }, 'validate path params');
+            req.logger.trace({ record: req.query }, 'validate query params');
 
-            validate(req.params, schema)
+            validate(req.query, schema)
                 .then((valid) => {
-                    req.params = valid;
+                    req.rawQuery = req.query;
+                    req.query = valid;
                     next();
                 })
                 .catch((originalError) => {
