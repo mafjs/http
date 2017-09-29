@@ -58,8 +58,8 @@ module.exports = function createExpressMethod(
             method.schema = {};
         }
 
-        if (method.beforeMethodCreation) {
-            method.beforeMethodCreation(method, di);
+        if (rawMethod.beforeMethodCreation) {
+            rawMethod.beforeMethodCreation(method, di);
         }
 
         method.middlewares.push(initStartTime(logger));
