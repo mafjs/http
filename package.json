@@ -1,6 +1,6 @@
 {
     "name": "maf-http",
-    "version": "0.9.0-beta.2",
+    "version": "0.9.0-beta.3",
     "description": "http handling",
     "main": "index.js",
     "files": [
