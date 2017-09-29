@@ -15,11 +15,6 @@ const initBodyValidation = require('./initBodyValidation');
 
 const initHandler = require('./initHandler');
 
-
-// var validation = require('./validation');
-//
-// var init = require('./init');
-
 module.exports = function createExpressMethod(
     logger,
     config,
