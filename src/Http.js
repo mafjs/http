@@ -136,17 +136,26 @@ class Http {
      * @param {Object} di
      * @return {Promise}
      */
-    init(app, di) {
+    initApp(app, di) {
+        this._logger.debug('init');
+
+        app.use(middlewares.requestId(this._logger));
+
+        // eslint-disable-next-line no-param-reassign
+        app.locals.di = di;
+
+        // TODO
+        if (this._config.responseTimeout) {
+            // eslint-disable-next-line no-param-reassign
+            app.locals.responseTimeout = this._config.responseTimeout;
+        }
+
+        return app;
+    }
+
+    initMethods(app, di) {
         return new Promise((resolve, reject) => {
-            this._logger.debug('init');
-
-            app.use(middlewares.requestId(this._logger));
-
-            // TODO
-            if (this._config.responseTimeout) {
-                // eslint-disable-next-line no-param-reassign
-                app.locals.responseTimeout = this._config.responseTimeout;
-            }
+            this._logger.debug('init methods');
 
             const promises = [];
 

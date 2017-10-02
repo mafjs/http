@@ -39,6 +39,7 @@ http.responseHelpers.result = function testHelper(next, data) {
 const methods = {
     'GET /test': {
         handler(req, res) {
+            req.logger.info('GET /test');
             // console.log(req.di);
             res.result(100500);
         }
@@ -50,6 +51,7 @@ const methods = {
             })
         },
         handler(req, res) {
+            req.logger.info({ record: req.body }, 'POST /test');
             res.result(req.body);
         }
     }
@@ -58,8 +60,9 @@ const methods = {
 const di = {};
 
 Promise.resolve()
+    .then(() => http.initApp(app, di))
     .then(() => http.addMethods(methods))
-    .then(() => http.init(app, di))
+    .then(() => http.initMethods(app, di))
     .then(() => {
         app.use(http.createBasicMiddlewareNotFound());
         app.use(http.createBasicMiddlewareSend());

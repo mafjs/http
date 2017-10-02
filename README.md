@@ -21,10 +21,8 @@ const http = new Http(logger, config);
 // init di with models, apis, etc this object will be in every request object
 const di = {};
 
-http.init(app, di)
-    .then(() => {
-
-    })
+http.initApp(app, di)
+    .then(app => http.initMethods(app, di))
     .catch((error) => {
 
     })
