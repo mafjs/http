@@ -15,6 +15,28 @@ const initBodyValidation = require('./initBodyValidation');
 
 const initHandler = require('./initHandler');
 
+function addCustomMiddlewares(logger, rawMethod, method, name) {
+    const customMiddlewares = rawMethod[name];
+
+    if (typeof customMiddlewares !== 'undefined') {
+        if (!Array.isArray(customMiddlewares)) {
+            throw new Error(`${method.httpMethod} ${method.route} method.${name} should be an array`);
+        }
+
+        logger.debug(`${method.httpMethod} ${method.route} add ${customMiddlewares.length} ${name}`);
+
+        Object.keys(customMiddlewares).forEach((i) => {
+            const middleware = customMiddlewares[i];
+            if (typeof middleware !== 'function') {
+                throw new Error(`${method.httpMethod} ${method.route} method.${name}[${i}] should be a function, got ${typeof middleware}`);
+            }
+
+            return method.middlewares.push(rawMethod[name][i]);
+        });
+    }
+}
+
+
 module.exports = function createExpressMethod(
     logger,
     config,
@@ -57,12 +79,24 @@ module.exports = function createExpressMethod(
             rawMethod.beforeMethodCreation(method, di);
         }
 
+        try {
+            addCustomMiddlewares(logger, rawMethod, method, 'beforeInitMiddlewares');
+        } catch (error) {
+            return reject(error);
+        }
+
         method.middlewares.push(initStartTime(logger));
         method.middlewares.push(initResponseTimeout(logger, rawMethod.timeout));
         method.middlewares.push(initReq(logger, requestHelpers));
         method.middlewares.push(initReqDi(logger, di));
         method.middlewares.push(initRes(logger, responseHelpers));
         method.middlewares.push(initResCtx(logger));
+
+        try {
+            addCustomMiddlewares(logger, rawMethod, method, 'beforeValidationMiddlewares');
+        } catch (error) {
+            return reject(error);
+        }
 
         if (kindOf(method.schema) === 'object') {
             initPathValidation(logger, method.middlewares, method.schema.path);
@@ -72,25 +106,14 @@ module.exports = function createExpressMethod(
             initBodyValidation(logger, method.middlewares, method.schema.body);
         }
 
-        if (typeof rawMethod.middlewares !== 'undefined') {
-            if (!Array.isArray(rawMethod.middlewares)) {
-                const error = new Error(`${method.httpMethod} ${method.route} method.middlewares should be an array`);
-                return reject(error);
-            }
-
-            logger.debug(`${method.httpMethod} ${method.route} add ${rawMethod.middlewares.length} middlewares`);
-
-            Object.keys(rawMethod.middlewares).forEach((i) => {
-                const middleware = rawMethod.middlewares[i];
-                if (typeof middleware !== 'function') {
-                    return reject(new Error(`${method.httpMethod} ${method.route} method.middlewares[${i}] should be a function, got ${typeof middleware}`));
-                }
-
-                return method.middlewares.push(rawMethod.middlewares[i]);
-            });
+        try {
+            addCustomMiddlewares(logger, rawMethod, method, 'middlewares');
+        } catch (error) {
+            return reject(error);
         }
 
         const handler = initHandler(logger, method.httpMethod, method.route, rawMethod.handler);
+
         method.middlewares.push(handler);
 
         return resolve(method);
