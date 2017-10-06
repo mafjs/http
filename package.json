@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/mafjs/http#readme",
   "devDependencies": {
-    "@maf/eslint-config": "0.3.7",
+    "@maf/eslint-config": "0.4.0",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.0",
