@@ -17,6 +17,12 @@ module.exports = function createMiddlewareRequestId(logger) {
             req.logger = logger.getLogger('request', { req_id: req.id });
         }
 
+        if (typeof req.query._trace !== 'undefined') {
+            req.logger.level('trace');
+        } else if (typeof req.query._debug !== 'undefined') {
+            req.logger.level('debug');
+        }
+
         req.logger.trace('request started');
 
         next();
