@@ -40,7 +40,7 @@
     "@maf/eslint-config": "0.3.7",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
-    "express": "^4.16.0",
+    "express": "^4.16.1",
     "in-publish": "^2.0.0",
     "maf-logger": "^0.6.1",
     "markdown-toc": "^1.2.0",
