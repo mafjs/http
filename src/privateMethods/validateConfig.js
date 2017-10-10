@@ -4,7 +4,7 @@ module.exports = function validateConfig(config) {
         return {
             strictResourceValidation: false,
             strictMethodValidation: false,
-            responseTimeout: 1 * 60 * 1000 // 1 minutes
+            responseTimeout: 1 * 60 * 1000, // 1 minutes
         };
     }
 

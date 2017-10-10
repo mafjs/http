@@ -15,20 +15,33 @@ const initBodyValidation = require('./initBodyValidation');
 
 const initHandler = require('./initHandler');
 
+/**
+ * @param {Logger} logger
+ * @param {Object} rawMethod
+ * @param {Object} method
+ * @param {String} name
+ */
 function addCustomMiddlewares(logger, rawMethod, method, name) {
     const customMiddlewares = rawMethod[name];
 
     if (typeof customMiddlewares !== 'undefined') {
         if (!Array.isArray(customMiddlewares)) {
-            throw new Error(`${method.httpMethod} ${method.route} method.${name} should be an array`);
+            throw new Error(
+                `${method.httpMethod} ${method.route} method.${name} should be an array`
+            );
         }
 
-        logger.debug(`${method.httpMethod} ${method.route} add ${customMiddlewares.length} ${name}`);
+        logger.debug(
+            `${method.httpMethod} ${method.route} add ${customMiddlewares.length} ${name}`
+        );
 
         Object.keys(customMiddlewares).forEach((i) => {
             const middleware = customMiddlewares[i];
             if (typeof middleware !== 'function') {
-                throw new Error(`${method.httpMethod} ${method.route} method.${name}[${i}] should be a function, got ${typeof middleware}`);
+                throw new Error(
+                    // eslint-disable-next-line max-len
+                    `${method.httpMethod} ${method.route} method.${name}[${i}] should be a function, got ${typeof middleware}`
+                );
             }
 
             return method.middlewares.push(rawMethod[name][i]);
@@ -52,7 +65,7 @@ module.exports = function createExpressMethod(
         const method = {
             httpMethod: rawMethod.http.method.toLowerCase(),
             route: rawMethod.http.path,
-            middlewares: []
+            middlewares: [],
         };
 
         if (endpoint.path) {
@@ -63,8 +76,8 @@ module.exports = function createExpressMethod(
             {
                 record: {
                     httpMethod: method.httpMethod,
-                    route: method.route
-                }
+                    route: method.route,
+                },
             },
             'create express method'
         );

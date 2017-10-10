@@ -15,14 +15,16 @@ module.exports = function createMiddlewareInitReq(logger, helpers) {
 
         res.send = function reassignedExpressSend() {
             // eslint-disable-next-line prefer-rest-params
-            req.logger.trace({ record: arguments }, 'call res.send');
+            req.logger.trace({record: arguments}, 'call res.send');
 
             if (res.timeout !== null) {
                 clearTimeout(res.timeout);
             }
 
             if (res.headersSent) {
-                return req.logger.error(new Error('middlewareInitReq.reassignedExpressSend, headers already sent'));
+                return req.logger.error(
+                    new Error('middlewareInitReq.reassignedExpressSend, headers already sent')
+                );
             }
 
             // eslint-disable-next-line prefer-rest-params

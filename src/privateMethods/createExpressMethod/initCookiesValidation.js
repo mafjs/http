@@ -7,7 +7,7 @@ module.exports = function initMiddlewareCookiesValidation(logger, middlewares, s
         logger.trace('add cookies validation middleware');
 
         middlewares.push((req, res, next) => {
-            req.logger.trace({ record: req.cookies }, 'validate cookies');
+            req.logger.trace({record: req.cookies}, 'validate cookies');
 
             validate(req.cookies, schema)
                 .then((valid) => {

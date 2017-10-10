@@ -8,7 +8,7 @@ module.exports = {
             return;
         }
 
-        const { start } = this.ctx.time;
+        const {start} = this.ctx.time;
         const end = new Date();
 
         this.ctx.time.end = end;
@@ -36,7 +36,7 @@ module.exports = {
         const start = this.ctx.time[name].getTime();
 
         this.ctx.time[name] = now - start;
-    }
+    },
 
     // TODO check express and http.ServerResponse method conflicts
     // alias for cookie()

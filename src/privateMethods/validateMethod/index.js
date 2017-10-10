@@ -24,10 +24,10 @@ const createMethodSchema = function createMethodSchema() {
                         query: joi.object().keys({}), // req.query
                         headers: joi.object().keys({}), // req.headers
                         body: joi.object().keys({}), // req.body
-                        cookies: joi.object().keys({}) // req.cookies
+                        cookies: joi.object().keys({}), // req.cookies
                     }),
                 handler: joi.func().required(),
-                beforeMethodCreation: joi.func()
+                beforeMethodCreation: joi.func(),
             })
     );
 };
@@ -43,10 +43,10 @@ module.exports = function validateMethod(logger, config, httpParam, raw) {
         const options = {
             allowUnknown: true,
             convert: false,
-            abortEarly: true
+            abortEarly: true,
         };
 
-        logger.trace({ record: httpParam }, 'validate method');
+        logger.trace({record: httpParam}, 'validate method');
 
         joi.validate(rawMethod, methodSchema, options, (error, valid) => {
             if (error) {

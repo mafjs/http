@@ -9,6 +9,9 @@ const createExpressMethod = require('./privateMethods/createExpressMethod');
 const helpers = require('./helpers');
 const middlewares = require('./middlewares');
 
+/**
+ * Http
+ */
 class Http {
     /**
      * @param {logger} logger
@@ -27,7 +30,7 @@ class Http {
         this._endpoint = {
             title: null,
             description: null,
-            path: null
+            path: null,
         };
 
         this._methodInc = 0;
@@ -43,7 +46,7 @@ class Http {
      * @param {String|Object} endpoint
      */
     setEndpoint(endpoint) {
-        this._logger.debug({ record: endpoint }, 'setEndpoint');
+        this._logger.debug({record: endpoint}, 'setEndpoint');
 
         // TODO validate endpoint
         if (kindOf(endpoint) === 'string') {
@@ -53,6 +56,10 @@ class Http {
         }
     }
 
+    /**
+     * @param {Function} fn
+     * @return {this}
+     */
     setBeforeResponseMiddleware(fn) {
         this._logger.debug('setBeforeResponseMiddleware');
         // TODO validate and error
@@ -68,7 +75,7 @@ class Http {
      * @return {Promise}
      */
     addMethod(rawHttp, rawMethod) {
-        this._logger.debug({ record: rawHttp }, 'addMethod');
+        this._logger.debug({record: rawHttp}, 'addMethod');
 
         let http = null;
         let method = null;
@@ -102,7 +109,7 @@ class Http {
      */
     addMethods(methods) {
         return new Promise((resolve, reject) => {
-            this._logger.debug({ record: Object.keys(methods) }, 'addMethods');
+            this._logger.debug({record: Object.keys(methods)}, 'addMethods');
 
             const methodsParamType = kindOf(methods);
 
@@ -112,14 +119,14 @@ class Http {
                     param: 'methods',
                     validType: 'object',
                     type: methodsParamType,
-                    value: this._json(methods)
+                    value: this._json(methods),
                 }));
             }
 
             const promises = [];
 
             Object.keys(methods).forEach((http) => {
-                this._logger.trace({ record: http }, 'addMethods => addMethod');
+                this._logger.trace({record: http}, 'addMethods => addMethod');
                 promises.push(this.addMethod(http, methods[http]));
             });
 
@@ -153,6 +160,11 @@ class Http {
         return app;
     }
 
+    /**
+     * @param {Express} app
+     * @param {Object} di
+     * @return {Promise}
+     */
     initMethods(app, di) {
         return new Promise((resolve, reject) => {
             this._logger.debug('init methods');
@@ -183,7 +195,10 @@ class Http {
                             method.middlewares.push(this._beforeResponseMiddleware);
                         }
 
-                        this._logger.trace(`add express method for ${method.httpMethod.toUpperCase()} ${method.route}`);
+                        this._logger.trace(
+                            // eslint-disable-next-line max-len
+                            `add express method for ${method.httpMethod.toUpperCase()} ${method.route}`
+                        );
 
                         app[method.httpMethod](method.route, method.middlewares);
                     });
@@ -196,17 +211,25 @@ class Http {
         });
     }
 
-
+    /**
+     * @return {Function}
+     */
     createBasicMiddlewareNotFound() {
         this._logger.trace('create basicMiddlewareNotFound');
         return middlewares.basicNotFound;
     }
 
+    /**
+     * @return {Function}
+     */
     createBasicMiddlewareSend() {
         this._logger.trace('create basicMiddlewareSend');
         return middlewares.basicSend;
     }
 
+    /**
+     * @return {Function}
+     */
     createBasicMiddlewareError() {
         this._logger.trace('create basicMiddlewareError');
         return middlewares.basicError;

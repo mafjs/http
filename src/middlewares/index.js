@@ -7,5 +7,5 @@ module.exports = {
     requestId,
     basicNotFound,
     basicSend,
-    basicError
+    basicError,
 };

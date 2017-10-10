@@ -5,14 +5,14 @@ module.exports = function middlewareBasicError(error, req, res, next) {
             error: {
                 message: 'invalid request data',
                 requestPart: error.requestPart,
-                details: error.details
-            }
+                details: error.details,
+            },
         });
     } else {
-        req.logger.error({ req, err: error });
+        req.logger.error({req, err: error});
 
         res.status(500).json({
-            error: 'Server Error'
+            error: 'Server Error',
         });
     }
 };

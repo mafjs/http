@@ -16,10 +16,10 @@ app.use(cookieParser());
 
 const bodyParser = require('body-parser');
 
-app.use(bodyParser.json({ type: '*/*' }));
+app.use(bodyParser.json({type: '*/*'}));
 
 const config = {
-    responseTimeout: 1000
+    responseTimeout: 1000,
 };
 
 const http = new Http(logger, config);
@@ -30,7 +30,7 @@ http.responseHelpers.result = function testHelper(next, data) {
     this.ctx.status = 200;
 
     this.ctx.body = {
-        result: data
+        result: data,
     };
 
     next('send');
@@ -42,19 +42,19 @@ const methods = {
             req.logger.info('GET /test');
             // console.log(req.di);
             res.result(100500);
-        }
+        },
     },
     'POST /test': {
         schema: {
             body: joi.object().required().keys({
-                id: joi.string().required()
-            })
+                id: joi.string().required(),
+            }),
         },
         handler(req, res) {
-            req.logger.info({ record: req.body }, 'POST /test');
+            req.logger.info({record: req.body}, 'POST /test');
             res.result(req.body);
-        }
-    }
+        },
+    },
 };
 
 const di = {};

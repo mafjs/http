@@ -7,7 +7,7 @@ module.exports = function initMiddlewareBodyValidation(logger, middlewares, sche
         logger.trace('add body validation middleware');
 
         middlewares.push((req, res, next) => {
-            req.logger.trace({ record: req.body }, 'validate body params');
+            req.logger.trace({record: req.body}, 'validate body params');
 
             validate(req.body, schema)
                 .then((valid) => {

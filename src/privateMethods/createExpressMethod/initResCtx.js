@@ -6,15 +6,15 @@ module.exports = function createMiddlewareInitResCtx(logger) {
             time: {
                 start: req.startTime || new Date(),
                 end: null,
-                total: null
+                total: null,
             },
             status: null,
             headers: null,
             cookies: null,
-            body: null
+            body: null,
         };
 
-        req.logger.trace({ record: res.ctx }, 'init res.ctx');
+        req.logger.trace({record: res.ctx}, 'init res.ctx');
 
         next();
     };

@@ -23,16 +23,18 @@ module.exports = function initMiddlewareResponseTimeout(logger, timeout) {
             return;
         }
 
-        req.logger.trace({ record: timeoutDelay }, 'init response timeout');
+        req.logger.trace({record: timeoutDelay}, 'init response timeout');
 
         res.timeout = setTimeout(() => {
             if (res.headersSent) {
-                return req.logger.error(new Error('middlewareResponseTimeout, header already sent'));
+                return req.logger.error(
+                    new Error('middlewareResponseTimeout, header already sent')
+                );
             }
 
             const error = HttpError.createError(HttpError.CODES.RESPONSE_TIMEOUT)
                 .bind({
-                    delay: timeoutDelay
+                    delay: timeoutDelay,
                 });
 
             return next(error);
