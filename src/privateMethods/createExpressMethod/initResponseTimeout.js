@@ -34,7 +34,7 @@ module.exports = function initMiddlewareResponseTimeout(logger, timeout) {
 
             const error = HttpError.createError(HttpError.CODES.RESPONSE_TIMEOUT)
                 .bind({
-                    delay: timeoutDelay,
+                    delay: timeoutDelay
                 });
 
             return next(error);

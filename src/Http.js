@@ -30,7 +30,7 @@ class Http {
         this._endpoint = {
             title: null,
             description: null,
-            path: null,
+            path: null
         };
 
         this._methodInc = 0;
@@ -120,7 +120,7 @@ class Http {
                     param: 'methods',
                     validType: 'object',
                     type: methodsParamType,
-                    value: this._json(methods),
+                    value: this._json(methods)
                 }));
             }
 

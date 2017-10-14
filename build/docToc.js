@@ -19,12 +19,10 @@ const internals = {
     }
 };
 
-internals.generateToc = function () {
-
+internals.generateToc = function() {
     const tocOptions = {
         bullets: '-',
-        slugify: function (text) {
-
+        slugify: function(text) {
             return text.toLowerCase()
                 .replace(/\s/g, '-')
                 .replace(/[^\w-]/g, '');
@@ -32,15 +30,22 @@ internals.generateToc = function () {
     };
 
     const api = Toc.insert(internals.api.contents, tocOptions)
-        .replace(/<!-- version -->(.|\n)*<!-- versionstop -->/, `<!-- version -->\n# ${Package.version} API Reference\n<!-- versionstop -->`);
+        .replace(
+            /<!-- version -->(.|\n)*<!-- versionstop -->/,
+            `<!-- version -->\n# ${Package.version} API Reference\n<!-- versionstop -->`
+        );
 
     Fs.writeFileSync(internals.api.filename, api);
 };
 
-internals.generateLink = function () {
+internals.generateLink = function() {
     // create absolute URL for versioned docs
     const readme = internals.readme.contents
-        .replace(/\[API Reference\]\(.*\)/gi, `[API Reference](${Package.homepage || ''}/blob/v${Package.version}/${internals.api.filename.substr(2)})`);
+        .replace(
+            /\[API Reference\]\(.*\)/gi,
+            // eslint-disable-next-line max-len
+            `[API Reference](${Package.homepage || ''}/blob/v${Package.version}/${internals.api.filename.substr(2)})`
+        );
 
     Fs.writeFileSync(internals.readme.filename, readme);
 };

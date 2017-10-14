@@ -3,7 +3,7 @@ module.exports = function prepareMethod(logger, raw) {
         logger.trace('rawMethod is function, make object with handler');
 
         return {
-            handler: raw,
+            handler: raw
         };
     }
 

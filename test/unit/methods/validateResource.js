@@ -1,35 +1,32 @@
-var t = require('tap');
-var proxyquire = require('proxyquire');
+let t = require('tap');
+let proxyquire = require('proxyquire');
 
-var root = '../../../package';
+let root = '../../../package';
 
-var HttpError = require(root + '/Error');
+let HttpError = require(root + '/Error');
 
 
-t.test('should return promise', function (t) {
-
-    var validateResource = proxyquire(root + '/methods/validateResource', {
+t.test('should return promise', function(t) {
+    let validateResource = proxyquire(root + '/methods/validateResource', {
         joi: {
-            validate: function () {}
+            validate: function() {}
         }
     });
 
-    var promise = validateResource();
+    let promise = validateResource();
 
     t.type(promise.then, 'function');
     t.type(promise.catch, 'function');
 
     t.end();
-
 });
 
-t.test('should call joi.validate', function (t) {
+t.test('should call joi.validate', function(t) {
+    let logger = {debug: function() {}};
 
-    var logger = {debug: function () {}};
+    let config = {a: 1};
 
-    var config = {a: 1};
-
-    var raw = {
+    let raw = {
         path: '',
         methods: {
             GET: {},
@@ -37,9 +34,9 @@ t.test('should call joi.validate', function (t) {
         }
     };
 
-    var validateResource = proxyquire(root + '/methods/validateResource', {
+    let validateResource = proxyquire(root + '/methods/validateResource', {
         joi: {
-            validate: function (value /*, schema, options, callback */) {
+            validate: function(value /* , schema, options, callback */) {
                 t.same(value, raw);
                 t.end();
             }
@@ -47,21 +44,19 @@ t.test('should call joi.validate', function (t) {
     });
 
     validateResource(logger, config, raw);
-
 });
 
-t.test('should resolve promise with valid data, if rawResource valid', function (t) {
-
-    var validateResource = proxyquire(root + '/methods/validateResource', {
+t.test('should resolve promise with valid data, if rawResource valid', function(t) {
+    let validateResource = proxyquire(root + '/methods/validateResource', {
         joi: {
-            validate: function (value, schema, options, callback) {
+            validate: function(value, schema, options, callback) {
                 callback(null, {a: 1});
             }
         }
     });
 
     validateResource()
-            .then(function (valid) {
+            .then(function(valid) {
                 t.same(valid, {a: 1});
                 t.end();
             })
@@ -69,24 +64,22 @@ t.test('should resolve promise with valid data, if rawResource valid', function 
 });
 
 
-t.test('should reject HttpError with INVALID_RESOURCE_OBJECT, if validation fails', function (t) {
-
-    var validateResource = proxyquire(root + '/methods/validateResource', {
+t.test('should reject HttpError with INVALID_RESOURCE_OBJECT, if validation fails', function(t) {
+    let validateResource = proxyquire(root + '/methods/validateResource', {
         joi: {
-            validate: function (value, schema, options, callback) {
+            validate: function(value, schema, options, callback) {
                 callback(new Error('validation fails'));
             }
         }
     });
 
     validateResource()
-            .then(function () {
+            .then(function() {
                 t.threw(new Error('should reject'));
             })
-            .catch(function (error) {
+            .catch(function(error) {
                 t.ok(error instanceof HttpError);
                 t.equal(error.code, HttpError.CODES.INVALID_RESOURCE_OBJECT);
                 t.end();
             });
-
 });

@@ -8,7 +8,7 @@ const createHttpParamSchema = function createHttpParamSchema() {
     return joi.object().required().keys({
         method: joi.string().required().trim()
                 .valid(['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']),
-        path: joi.alternatives().try(joi.string().trim(), joi.array(), joi.object().type(RegExp)),
+        path: joi.alternatives().try(joi.string().trim(), joi.array(), joi.object().type(RegExp))
     });
 };
 
@@ -23,7 +23,7 @@ module.exports = function validateHttpParam(logger, config, rawHttpParam) {
         const options = {
             allowUnknown: false,
             convert: true,
-            abortEarly: true,
+            abortEarly: true
         };
 
         joi.validate(httpParam, schema, options, (error, valid) => {

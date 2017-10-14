@@ -65,7 +65,7 @@ module.exports = function createExpressMethod(
         const method = {
             httpMethod: rawMethod.http.method.toLowerCase(),
             route: rawMethod.http.path,
-            middlewares: [],
+            middlewares: []
         };
 
         if (endpoint.path) {
@@ -76,8 +76,8 @@ module.exports = function createExpressMethod(
             {
                 record: {
                     httpMethod: method.httpMethod,
-                    route: method.route,
-                },
+                    route: method.route
+                }
             },
             'create express method'
         );

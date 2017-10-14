@@ -3,7 +3,7 @@ const joi = require('joi');
 const options = {
     convert: true,
     abortEarly: false,
-    allowUnknown: false,
+    allowUnknown: false
 };
 
 module.exports = function validate(value, schema) {

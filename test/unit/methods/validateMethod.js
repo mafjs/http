@@ -1,45 +1,42 @@
-var t = require('tap');
-var proxyquire = require('proxyquire');
+let t = require('tap');
+let proxyquire = require('proxyquire');
 
-var root = '../../../package';
+let root = '../../../package';
 
-var HttpError = require(root + '/Error');
+let HttpError = require(root + '/Error');
 
 
-t.test('should return promise', function (t) {
-
-    var validateMethod = proxyquire(root + '/methods/validateMethod', {
+t.test('should return promise', function(t) {
+    let validateMethod = proxyquire(root + '/methods/validateMethod', {
         joi: {
-            validate: function () {}
+            validate: function() {}
         }
     });
 
-    var logger = {
-        debug: function () {},
-        trace: function () {}
+    let logger = {
+        debug: function() {},
+        trace: function() {}
     };
 
-    var promise = validateMethod(logger);
+    let promise = validateMethod(logger);
 
     t.type(promise.then, 'function');
     t.type(promise.catch, 'function');
 
     t.end();
-
 });
 
-t.test('should call joi.validate', function (t) {
-
-    var logger = {
-        debug: function () {},
-        trace: function () {}
+t.test('should call joi.validate', function(t) {
+    let logger = {
+        debug: function() {},
+        trace: function() {}
     };
 
-    var config = {a: 1};
+    let config = {a: 1};
 
-    var method = 'GET';
+    let method = 'GET';
 
-    var raw = {
+    let raw = {
         path: '',
         methods: {
             GET: {},
@@ -47,9 +44,9 @@ t.test('should call joi.validate', function (t) {
         }
     };
 
-    var validateMethod = proxyquire(root + '/methods/validateMethod', {
+    let validateMethod = proxyquire(root + '/methods/validateMethod', {
         joi: {
-            validate: function (value /*, schema, options, callback */) {
+            validate: function(value /* , schema, options, callback */) {
                 t.same(value, raw);
                 t.end();
             }
@@ -57,26 +54,24 @@ t.test('should call joi.validate', function (t) {
     });
 
     validateMethod(logger, config, method, raw);
-
 });
 
-t.test('should resolve promise with valid data, if rawMethod valid', function (t) {
-
-    var validateMethod = proxyquire(root + '/methods/validateMethod', {
+t.test('should resolve promise with valid data, if rawMethod valid', function(t) {
+    let validateMethod = proxyquire(root + '/methods/validateMethod', {
         joi: {
-            validate: function (value, schema, options, callback) {
+            validate: function(value, schema, options, callback) {
                 callback(null, {a: 1});
             }
         }
     });
 
-    var logger = {
-        debug: function () {},
-        trace: function () {}
+    let logger = {
+        debug: function() {},
+        trace: function() {}
     };
 
     validateMethod(logger)
-            .then(function (valid) {
+            .then(function(valid) {
                 t.same(valid, {a: 1});
                 t.end();
             })
@@ -84,82 +79,77 @@ t.test('should resolve promise with valid data, if rawMethod valid', function (t
 });
 
 
-t.test('should reject HttpError code = INVALID_METHOD_OBJECT, if validation fails', function (t) {
-
-    var validateMethod = proxyquire(root + '/methods/validateMethod', {
+t.test('should reject HttpError code = INVALID_METHOD_OBJECT, if validation fails', function(t) {
+    let validateMethod = proxyquire(root + '/methods/validateMethod', {
         joi: {
-            validate: function (value, schema, options, callback) {
+            validate: function(value, schema, options, callback) {
                 callback(new Error('validation fails'));
             }
         }
     });
 
-    var logger = {
-        debug: function () {},
-        trace: function () {}
+    let logger = {
+        debug: function() {},
+        trace: function() {}
     };
 
     validateMethod(logger)
-            .then(function () {
+            .then(function() {
                 t.threw(new Error('should reject'));
             })
-            .catch(function (error) {
+            .catch(function(error) {
                 t.ok(error instanceof HttpError);
                 t.equal(error.code, HttpError.CODES.INVALID_METHOD_OBJECT);
                 t.end();
             });
-
 });
 
-t.test('should call prepare method internally', function (t) {
-
-    var validateMethod = proxyquire(root + '/methods/validateMethod', {
+t.test('should call prepare method internally', function(t) {
+    let validateMethod = proxyquire(root + '/methods/validateMethod', {
         joi: {
-            validate: function (value, schema, options, callback) {
+            validate: function(value, schema, options, callback) {
                 callback(null, {a: 1});
             }
         },
-        prepare: function (/*logger, rawMethod*/) {
+        prepare: function(/* logger, rawMethod*/) {
             t.end();
         }
     });
 
-    var logger = {
-        debug: function () {},
-        trace: function () {}
+    let logger = {
+        debug: function() {},
+        trace: function() {}
     };
 
     return validateMethod(logger);
-
 });
 
 
-t.test('prepare method', function (t) {
+t.test('prepare method', function(t) {
+    t.test('should return object if raw is object', function(t) {
+        let logger = {};
 
-    t.test('should return object if raw is object', function (t) {
-        var logger = {};
+        let raw = {handler: 'this_is_function'};
 
-        var raw = {handler: 'this_is_function'};
-
-        var prepare = proxyquire(root + '/methods/validateMethod/prepare', {});
+        let prepare = proxyquire(root + '/methods/validateMethod/prepare', {});
 
         t.same(prepare(logger, raw), {handler: 'this_is_function'});
 
         t.end();
     });
 
-    t.test('should return object if raw is function', function (t) {
-        var logger = {
+    t.test('should return object if raw is function', function(t) {
+        let logger = {
             debug: () => {},
             trace: () => {},
-            getLogger: () => this
+            getLogger: () => this // eslint-disable-line no-invalid-this
         };
 
-        var raw = function () {};
+        let raw = function() {};
 
-        var prepare = proxyquire(root + '/methods/validateMethod/prepare', {});
+        let prepare = proxyquire(root + '/methods/validateMethod/prepare', {});
 
-        var result = prepare(logger, raw);
+        let result = prepare(logger, raw);
 
         t.equal(Object.keys(result).length, 1);
 
@@ -169,6 +159,4 @@ t.test('prepare method', function (t) {
     });
 
     t.end();
-
-
 });

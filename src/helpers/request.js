@@ -55,6 +55,6 @@ module.exports = {
     },
     getCookies(names) {
         return pick(this.cookies, names);
-    },
+    }
     // TODO getHeaders
 };

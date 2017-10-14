@@ -9,8 +9,8 @@ module.exports = function middlewareBasicNotFound(req, res, next) {
         return res.status(404).json({
             error: {
                 message: 'resource not found',
-                code: 'RESOURCE_NOT_FOUND',
-            },
+                code: 'RESOURCE_NOT_FOUND'
+            }
         });
     }
 

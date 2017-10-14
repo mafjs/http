@@ -6,7 +6,7 @@ module.exports = function prepareHttpParam(logger, raw) {
 
         obj = {
             method: raw.substring(0, raw.indexOf(' ')),
-            path: raw.substring(firstSpacePosition + 1),
+            path: raw.substring(firstSpacePosition + 1)
         };
 
         logger.trace({record: {raw, obj}}, 'parse http param string');

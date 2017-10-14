@@ -1,51 +1,48 @@
-var t = require('tap');
-var proxyquire = require('proxyquire');
+let t = require('tap');
+let proxyquire = require('proxyquire');
 
-var root = '../../../package';
+let root = '../../../package';
 
-var HttpError = require(root + '/Error');
+let HttpError = require(root + '/Error');
 
 
-t.test('should return promise', function (t) {
-
-    var validateHttpParam = proxyquire(root + '/methods/validateHttpParam', {
+t.test('should return promise', function(t) {
+    let validateHttpParam = proxyquire(root + '/methods/validateHttpParam', {
         joi: {
-            validate: function () {}
+            validate: function() {}
         }
     });
 
-    var logger = {
-        debug: function () {},
-        trace: function () {}
+    let logger = {
+        debug: function() {},
+        trace: function() {}
     };
 
-    var promise = validateHttpParam(logger);
+    let promise = validateHttpParam(logger);
 
     t.type(promise.then, 'function');
     t.type(promise.catch, 'function');
 
     t.end();
-
 });
 
-t.test('should call joi.validate', function (t) {
-
-    var logger = {
-        debug: function () {},
-        trace: function () {}
+t.test('should call joi.validate', function(t) {
+    let logger = {
+        debug: function() {},
+        trace: function() {}
     };
 
-    var config = {a: 1};
+    let config = {a: 1};
 
-    var raw = {
+    let raw = {
         method: 'GET',
         path: '/'
     };
 
-    var validateHttpParam = proxyquire(root + '/methods/validateHttpParam', {
+    let validateHttpParam = proxyquire(root + '/methods/validateHttpParam', {
 
         joi: {
-            validate: function (value) {
+            validate: function(value) {
                 t.same(value, raw);
                 t.end();
             }
@@ -54,31 +51,29 @@ t.test('should call joi.validate', function (t) {
     });
 
     validateHttpParam(logger, config, raw);
-
 });
 
-t.test('should call validateHttpParam/prepare fn', function (t) {
-
-    var logger = {
-        debug: function () {},
-        trace: function () {}
+t.test('should call validateHttpParam/prepare fn', function(t) {
+    let logger = {
+        debug: function() {},
+        trace: function() {}
     };
 
-    var config = {a: 1};
+    let config = {a: 1};
 
-    var raw = {
+    let raw = {
         method: 'GET',
         path: '/'
     };
 
-    var validateHttpParam = proxyquire(root + '/methods/validateHttpParam', {
+    let validateHttpParam = proxyquire(root + '/methods/validateHttpParam', {
 
-        './prepare': function () {
+        './prepare': function() {
             t.end();
         },
 
-        joi: {
-            validate: function () {
+        'joi': {
+            validate: function() {
 
             }
         }
@@ -86,56 +81,52 @@ t.test('should call validateHttpParam/prepare fn', function (t) {
     });
 
     validateHttpParam(logger, config, raw);
-
 });
 
-t.test('should resolve promise with valid data, if rawHttpParam valid', function (t) {
-
-    var validateHttpParam = proxyquire(root + '/methods/validateHttpParam', {
+t.test('should resolve promise with valid data, if rawHttpParam valid', function(t) {
+    let validateHttpParam = proxyquire(root + '/methods/validateHttpParam', {
         joi: {
-            validate: function (value, schema, options, callback) {
+            validate: function(value, schema, options, callback) {
                 callback(null, {a: 1});
             }
         }
     });
 
-    var logger = {
-        debug: function () {},
-        trace: function () {}
+    let logger = {
+        debug: function() {},
+        trace: function() {}
     };
 
     validateHttpParam(logger)
-            .then(function (valid) {
+            .then(function(valid) {
                 t.same(valid, {a: 1});
                 t.end();
             })
             .catch(t.threw);
 });
 
-
-t.test('should reject HttpError code = INVALID_HTTP_PARAM_OBJECT, if validation fails', function (t) {
-
-    var validateHttpParam = proxyquire(root + '/methods/validateHttpParam', {
+// eslint-disable-next-line max-len
+t.test('should reject HttpError code = INVALID_HTTP_PARAM_OBJECT, if validation fails', function(t) {
+    let validateHttpParam = proxyquire(root + '/methods/validateHttpParam', {
         joi: {
-            validate: function (value, schema, options, callback) {
+            validate: function(value, schema, options, callback) {
                 callback(new Error('validation fails'));
             }
         }
     });
 
-    var logger = {
-        debug: function () {},
-        trace: function () {}
+    let logger = {
+        debug: function() {},
+        trace: function() {}
     };
 
     validateHttpParam(logger)
-            .then(function () {
+            .then(function() {
                 t.threw(new Error('should reject'));
             })
-            .catch(function (error) {
+            .catch(function(error) {
                 t.ok(error instanceof HttpError);
                 t.equal(error.code, HttpError.CODES.INVALID_HTTP_PARAM_OBJECT);
                 t.end();
             });
-
 });

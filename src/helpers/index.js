@@ -3,5 +3,5 @@ const response = require('./response');
 
 module.exports = {
     request,
-    response,
+    response
 };

@@ -11,5 +11,5 @@ module.exports = require('maf-error').create('HttpError', {
         got type = "%type%"
         value = %value%`,
     INVALID_REQUEST_DATA: 'invalid request data',
-    RESPONSE_TIMEOUT: 'response timeout: %delay%ms',
+    RESPONSE_TIMEOUT: 'response timeout: %delay%ms'
 });

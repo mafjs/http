@@ -1,76 +1,68 @@
 require('source-map-support').install();
 
-var t = require('tap');
-var proxyquire = require('proxyquire');
+let t = require('tap');
+let proxyquire = require('proxyquire');
 
-var root = '../../../package';
+let root = '../../../package';
 
-var HttpError = require(root + '/Error');
+// let HttpError = require(root + '/Error');
 
 /**
  * @test {Http#addMethod}
  */
-t.test('should call validateHttpParam', function (t) {
-
-    var logger = {
+t.test('should call validateHttpParam', function(t) {
+    let logger = {
         debug: () => {},
         trace: () => {},
-        getLogger: () => this
+        getLogger: () => this // eslint-disable-line no-invalid-this
     };
 
-    var config = {
+    let config = {
         a: 1
     };
 
-    var httpParam = {method: 'GET', path: '/test'};
+    let httpParam = {method: 'GET', path: '/test'};
 
-    var Http = proxyquire(root + '/Http', {
-        './methods/validateHttpParam': function (_logger, _config, _httpParam) {
+    let Http = proxyquire(root + '/Http', {
+        './methods/validateHttpParam': function(_logger, _config, _httpParam) {
             // t.same(_logger, logger);
             t.same(_config, config);
             t.same(_httpParam, httpParam);
             t.end();
         },
-        './methods/validateMethod': function () {
-
+        './methods/validateMethod': function() {
             return new Promise((resolve) => {
                 resolve({});
             });
-
         }
     });
 
-    var rest = new Http(logger, config);
+    let rest = new Http(logger, config);
 
     rest.addMethod(httpParam, {});
-
 });
 
 
-t.test('should call validateMethod', function (t) {
-
-    var logger = {
+t.test('should call validateMethod', function(t) {
+    let logger = {
         debug: () => {},
         trace: () => {},
-        getLogger: () => this
+        getLogger: () => this // eslint-disable-line no-invalid-this
     };
 
-    var config = {
+    let config = {
         a: 1
     };
 
-    var httpMethod = {handler: function () {}};
+    let httpMethod = {handler: function() {}};
 
-    var Http = proxyquire(root + '/Http', {
-        './methods/validateHttpParam': function () {
-
+    let Http = proxyquire(root + '/Http', {
+        './methods/validateHttpParam': function() {
             return new Promise((resolve) => {
                 resolve({method: 'GET', path: '/test'});
             });
-
         },
-        './methods/validateMethod': function (_logger, _config, _httpParam, _httpMethod) {
-
+        './methods/validateMethod': function(_logger, _config, _httpParam, _httpMethod) {
             // t.same(_logger, logger);
             t.same(_config, config);
             t.same(_httpParam, {method: 'GET', path: '/test'});
@@ -81,12 +73,10 @@ t.test('should call validateMethod', function (t) {
             return new Promise((resolve, reject) => {
                 resolve({});
             });
-
         }
     });
 
-    var rest = new Http(logger, config);
+    let rest = new Http(logger, config);
 
     rest.addMethod('httpParamStub', httpMethod);
-
 });
