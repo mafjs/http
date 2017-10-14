@@ -88,12 +88,14 @@ module.exports = function createExpressMethod(
             method.schema = {};
         }
 
-        if (rawMethod.beforeMethodCreation) {
-            rawMethod.beforeMethodCreation(method, di);
+        // onCreate
+        if (rawMethod.onCreate) {
+            rawMethod.onCreate(method, di);
         }
 
         try {
-            addCustomMiddlewares(logger, rawMethod, method, 'beforeInitMiddlewares');
+            // beforeInit
+            addCustomMiddlewares(logger, rawMethod, method, 'beforeInit');
         } catch (error) {
             return reject(error);
         }
@@ -106,7 +108,8 @@ module.exports = function createExpressMethod(
         method.middlewares.push(initResCtx(logger));
 
         try {
-            addCustomMiddlewares(logger, rawMethod, method, 'beforeValidationMiddlewares');
+            // inited
+            addCustomMiddlewares(logger, rawMethod, method, 'inited');
         } catch (error) {
             return reject(error);
         }
@@ -120,7 +123,8 @@ module.exports = function createExpressMethod(
         }
 
         try {
-            addCustomMiddlewares(logger, rawMethod, method, 'middlewares');
+            // validated
+            addCustomMiddlewares(logger, rawMethod, method, 'validated');
         } catch (error) {
             return reject(error);
         }
