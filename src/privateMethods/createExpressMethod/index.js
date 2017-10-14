@@ -22,9 +22,14 @@ const initHandler = require('./initHandler');
  * @param {String} name
  */
 function addCustomMiddlewares(logger, rawMethod, method, name) {
-    const customMiddlewares = rawMethod[name];
+    let customMiddlewares = rawMethod[name];
 
     if (typeof customMiddlewares !== 'undefined') {
+        if (typeof customMiddlewares === 'function') {
+            // FIXME change original method object
+            customMiddlewares = [customMiddlewares];
+        }
+
         if (!Array.isArray(customMiddlewares)) {
             throw new Error(
                 `${method.httpMethod} ${method.route} method.${name} should be an array`
@@ -44,7 +49,7 @@ function addCustomMiddlewares(logger, rawMethod, method, name) {
                 );
             }
 
-            return method.middlewares.push(rawMethod[name][i]);
+            return method.middlewares.push(middleware);
         });
     }
 }
@@ -102,7 +107,7 @@ module.exports = function createExpressMethod(
 
         method.middlewares.push(initStartTime(logger));
         method.middlewares.push(initResponseTimeout(logger, rawMethod.timeout));
-        method.middlewares.push(initReq(logger, requestHelpers));
+        method.middlewares.push(initReq(logger, rawMethod, requestHelpers));
         method.middlewares.push(initReqDi(logger, di));
         method.middlewares.push(initRes(logger, responseHelpers));
         method.middlewares.push(initResCtx(logger));

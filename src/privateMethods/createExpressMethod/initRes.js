@@ -1,7 +1,7 @@
-module.exports = function createMiddlewareInitReq(logger, helpers) {
+module.exports = function createMiddlewareInitRes(logger, helpers) {
     logger.trace('init response helpers and send middleware');
 
-    return function middlewareInitReq(req, res, next) {
+    return function middlewareInitRes(req, res, next) {
         req.logger.trace('init response helpers');
 
         Object.keys(helpers).forEach((name) => {
@@ -10,12 +10,10 @@ module.exports = function createMiddlewareInitReq(logger, helpers) {
 
         req.logger.trace('init res.send function');
 
-        // eslint-disable-next-line prefer-destructuring
         const send = res.send;
 
-        res.send = function reassignedExpressSend() {
-            // eslint-disable-next-line prefer-rest-params
-            req.logger.trace({record: arguments}, 'call res.send');
+        res.send = function reassignedExpressSend(...args) {
+            req.logger.trace({record: args}, 'call res.send');
 
             if (res.timeout !== null) {
                 clearTimeout(res.timeout);
@@ -27,8 +25,7 @@ module.exports = function createMiddlewareInitReq(logger, helpers) {
                 );
             }
 
-            // eslint-disable-next-line prefer-rest-params
-            send.apply(res, arguments);
+            send.apply(res, args);
 
             const responseTime = this.ctx.time.total;
 

@@ -9,8 +9,9 @@ module.exports = function createMiddlewareInitResCtx(logger) {
                 total: null
             },
             status: null,
-            headers: null,
-            cookies: null,
+            headers: {},
+            // TODO
+            cookies: {},
             body: null
         };
 

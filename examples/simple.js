@@ -3,6 +3,7 @@ require('maf-error/initGlobal');
 
 const logger = require('maf-logger').create('http-example');
 
+logger.level('trace');
 logger.level('info');
 
 const joi = require('joi');
@@ -18,16 +19,24 @@ const bodyParser = require('body-parser');
 
 app.use(bodyParser.json({type: '*/*'}));
 
+// app.use(require('express-status-monitor')());
+
+app.get('/test', (req, res) => {
+    res.json({result: 100500});
+});
+
 const config = {
     responseTimeout: 1000
 };
 
 const http = new Http(logger, config);
 
-http.setEndpoint('/api/v0');
+http.setEndpoint('/api');
 
 http.responseHelpers.result = function testHelper(next, data) {
     this.ctx.status = 200;
+
+    // this.ctx.headers['test'] = '100500';
 
     this.ctx.body = {
         result: data
@@ -37,10 +46,30 @@ http.responseHelpers.result = function testHelper(next, data) {
 };
 
 const methods = {
-    'GET /test': {
+    'GET /test/:id': {
+        onCreate: (method, di) => {
+            method.schema.query = joi.object().required().keys({
+                id: joi.string().required()
+            });
+        },
+
+        beforeInit: function(req, res, next) {
+            req.logger.info('beforeInit');
+            next();
+        },
+
+        inited: function(req, res, next) {
+            req.logger.info('inited');
+            next();
+        },
+
+        validated: function(req, res, next) {
+            req.logger.info('validated');
+            next();
+        },
+
         handler(req, res) {
             req.logger.info('GET /test');
-            // console.log(req.di);
             res.result(100500);
         }
     },
