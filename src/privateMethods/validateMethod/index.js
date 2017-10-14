@@ -57,7 +57,7 @@ module.exports = function validateMethod(logger, config, httpParam, raw) {
 
                 exception.bind(httpParam);
 
-                return reject();
+                return reject(exception);
             }
 
             return resolve(valid);
