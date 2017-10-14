@@ -56,16 +56,17 @@ class Http {
         }
     }
 
-    /**
-     * @param {Function} fn
-     * @return {this}
-     */
-    setBeforeResponseMiddleware(fn) {
-        this._logger.debug('setBeforeResponseMiddleware');
-        // TODO validate and error
-        this._beforeResponseMiddleware = fn;
-        return this;
-    }
+    // TODO remove
+    // /**
+    //  * @param {Function} fn
+    //  * @return {this}
+    //  */
+    // setBeforeResponseMiddleware(fn) {
+    //     this._logger.debug('setBeforeResponseMiddleware');
+    //     // TODO validate and error
+    //     this._beforeResponseMiddleware = fn;
+    //     return this;
+    // }
 
     /**
      * add rest method
@@ -191,9 +192,10 @@ class Http {
                     Object.keys(methods).forEach((i) => {
                         const method = methods[i];
 
-                        if (this._beforeResponseMiddleware) {
-                            method.middlewares.push(this._beforeResponseMiddleware);
-                        }
+                        // TODO remove
+                        // if (this._beforeResponseMiddleware) {
+                        //     method.middlewares.push(this._beforeResponseMiddleware);
+                        // }
 
                         this._logger.trace(
                             // eslint-disable-next-line max-len
