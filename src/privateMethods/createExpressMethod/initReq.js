@@ -4,7 +4,7 @@ module.exports = function createMiddlewareInitReq(logger, rawMethod, helpers) {
     return function middlewareInitReq(req, res, next) {
         req.logger.trace('init request helpers');
 
-        req.ctx.name = `${rawMethod.http.method.toUpperCase()}${rawMethod.http.path}`;
+        req.ctx.routeName = `${rawMethod.http.method.toUpperCase()}${rawMethod.http.path}`;
 
         Object.keys(helpers).forEach((name) => {
             req[name] = helpers[name].bind(req, next);

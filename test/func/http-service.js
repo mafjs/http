@@ -48,6 +48,7 @@ module.exports = () => {
 
             inited: function(req, res, next) {
                 res.ctx.body = {
+                    routeName: req.ctx.routeName,
                     result: []
                 };
 

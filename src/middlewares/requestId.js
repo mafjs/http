@@ -5,8 +5,7 @@ module.exports = function createMiddlewareRequestId(logger) {
         req.ctx = {
             id: null,
             logger: null,
-            name: null
-            // name: `${req.method}${req.route}`
+            routeName: null
         };
 
         Object.defineProperty(req, 'id', {

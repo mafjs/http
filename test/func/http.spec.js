@@ -20,12 +20,15 @@ tap.test('should 200 GET /api/test/:id', (t) => {
             .then((res) => {
                 t.type(res.headers['x-request-id'], 'string');
                 t.same(res.headers['x-test'], 'test-header-100500');
-                t.same(res.body, {result: [
-                    'beforeInit',
-                    'inited',
-                    'validated',
-                    'handler'
-                ]});
+                t.same(res.body, {
+                    routeName: 'GET/test/:id',
+                    result: [
+                        'beforeInit',
+                        'inited',
+                        'validated',
+                        'handler'
+                    ]
+                });
                 t.done();
         });
     });
