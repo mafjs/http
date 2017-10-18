@@ -23,8 +23,11 @@ tap.test('should 200 GET /api/test/:id', (t) => {
                 t.same(res.body, {
                     routeName: 'GET/test/:id',
                     result: [
+                        'globalBeforeInit',
                         'beforeInit',
+                        'globalInited',
                         'inited',
+                        'globalValidated',
                         'validated',
                         'handler'
                     ]

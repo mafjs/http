@@ -23,6 +23,12 @@ class Http {
         this.requestHelpers = helpers.request;
         this.responseHelpers = helpers.response;
 
+        this.globalMiddlewares = {
+            beforeInit: null,
+            inited: null,
+            validated: null
+        };
+
         this._logger = logger;
 
         this._config = validateConfig(config);
@@ -181,6 +187,7 @@ class Http {
                     app,
                     di,
                     this._endpoint,
+                    this.globalMiddlewares,
                     this._methods[id]
                 );
 

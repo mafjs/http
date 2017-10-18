@@ -32,6 +32,27 @@ module.exports = () => {
         next('send');
     };
 
+    http.globalMiddlewares = {
+        beforeInit: [
+            (req, res, next) => {
+                res._globalBeforeInit = true;
+                next();
+            }
+        ],
+        inited: [
+            (req, res, next) => {
+                res._globalInited = true;
+                next();
+            }
+        ],
+        validated: [
+            (req, res, next) => {
+                res._globalValidated = true;
+                next();
+            }
+        ]
+    };
+
     const methods = {
         'GET /test/:id': {
             onCreate: (method, di) => {
@@ -52,8 +73,16 @@ module.exports = () => {
                     result: []
                 };
 
-                if (res._beforeInitCalled) {
+                if (res._globalBeforeInit === true) {
+                    res.ctx.body.result.push('globalBeforeInit');
+                }
+
+                if (res._beforeInitCalled === true) {
                     res.ctx.body.result.push('beforeInit');
+                }
+
+                if (res._globalInited === true) {
+                    res.ctx.body.result.push('globalInited');
                 }
 
                 res.ctx.body.result.push('inited');
@@ -62,6 +91,10 @@ module.exports = () => {
             },
 
             validated: function(req, res, next) {
+                if (res._globalValidated === true) {
+                    res.ctx.body.result.push('globalValidated');
+                }
+
                 res.ctx.body.result.push('validated');
                 req.logger.trace('validated');
                 next();

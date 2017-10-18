@@ -24,6 +24,13 @@ const initHandler = require('./initHandler');
 function addCustomMiddlewares(logger, rawMethod, method, name) {
     let customMiddlewares = rawMethod[name];
 
+    if (rawMethod[name] === null) {
+        logger.trace(
+            `${method.httpMethod} ${method.route} no ${name} middlewares`
+        );
+        return;
+    }
+
     if (typeof customMiddlewares !== 'undefined') {
         if (typeof customMiddlewares === 'function') {
             // FIXME change original method object
@@ -63,6 +70,7 @@ module.exports = function createExpressMethod(
     app,
     di,
     endpoint,
+    globalMiddlewares,
     rawMethod
 ) {
     return new Promise((resolve, reject) => {
@@ -99,6 +107,8 @@ module.exports = function createExpressMethod(
         }
 
         try {
+            // globalBeforeInit
+            addCustomMiddlewares(logger, globalMiddlewares, method, 'beforeInit');
             // beforeInit
             addCustomMiddlewares(logger, rawMethod, method, 'beforeInit');
         } catch (error) {
@@ -113,6 +123,8 @@ module.exports = function createExpressMethod(
         method.middlewares.push(initResCtx(logger));
 
         try {
+            // globalInited
+            addCustomMiddlewares(logger, globalMiddlewares, method, 'inited');
             // inited
             addCustomMiddlewares(logger, rawMethod, method, 'inited');
         } catch (error) {
@@ -128,6 +140,8 @@ module.exports = function createExpressMethod(
         }
 
         try {
+            // globalValidated
+            addCustomMiddlewares(logger, globalMiddlewares, method, 'validated');
             // validated
             addCustomMiddlewares(logger, rawMethod, method, 'validated');
         } catch (error) {
