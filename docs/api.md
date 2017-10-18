@@ -1,155 +1,105 @@
 # maf-http 0.x API
 
-<!-- toc -->
 
-- [Http](#http)
-  - [`constructor ([logger], [config])`](#constructor-logger-config)
-  - [`addMethod (http, method)`](#addmethod-http-method)
-  - [`setEndpoint (endpoint)`](#setendpoint-endpoint)
-  - [`init (app)`](#init-app)
-- [MethodObject](#methodobject)
-- [HttpError](#httperror)
-  - [error codes on method creation](#error-codes-on-method-creation)
-  - [runtime error codes](#runtime-error-codes)
-
-<!-- tocstop -->
-
-## Http
-
-
-
-### `constructor ([logger], [config])`
-
-- `logger` - Logger. Optional. logger should have trace and debug methods
-- `config` - Object. Optional
-
-**config format**
+## method format
 
 ```js
 {
-    responseTimeout: 1000, // Number, default undefined
+    'GET /todos': {
+        schema: {
+            path: joi.object(),
+            query: joi.object(),
+            headers: joi.object(),
+            cookies: joi.object(),
+            body: joi.object()
+        },
 
-    /* not implemented */ strictResourceValidation: false,
-    /* not implemented */ strictMethodValidation: false
-}
-```
+        // your can modify schema
+        // before express method created
+        onCreate(method, di) {},
 
+        // before any other middlewares for this method
+        // Function or Function[]
+        beforeInit: [
+            (req, res, next) => {}
+        ],
 
+        init: [
 
+        ],
 
-### `addMethod (http, method)`
+        // add init middlewares
+        // TODO init requestId
+        // - req.ctx.id
+        // - req.ctx.logger
+        // - req.ctx.routeName = null
+        // - req.id
+        // - req.logger
+        // - process req.query._trace, req.query._debug
+        // internal add middlewares
+        // initStartTime
+        // - init req.startTime = new Date();
+        // initResponseTimeout
+        // - init response timeout res.timeout
+        // initReq
+        // - init req.ctx.routeName
+        // - init request helpers (hasQueryParam ...)
+        // initReqDi
+        // - req.di = di
+        // initRes
+        // - init response helpers
+        // - reassign res.send
+        // initResCtx
+        // - init res.ctx
 
-- `http`   - Object.
-- `method` - [MethodObject](#methodobject)
+        // after init middlewares
+        // Function or Function[]
+        inited: [
+            (req, res, next) => {}
+        ],
 
-`http` format
+        // add validation middlewares by schema
+        // initPathValidation
+        // initQueryValidation
+        // initCookiesValidation
+        // initHeadersValidation
+        // initBodyValidation
 
-```js
-{
-    method: 'GET', // ...
-    path: '/test'  // valid value for [express path](http://expressjs.com/ru/4x/api.html#path-examples)
-}
-```
+        // after validation middlewares
+        // Function or Function[]
+        validated: [
+            (req, res, next) => {}
+        ],
 
-alternatively http can be String `GET /test:id`
+        handler(req, res, next) {},
 
-return `Promise`
-
-
-
-### `setEndpoint (endpoint)`
-
-add endpoint info
-
-- `endpoint` - Object|String
-
-if endpoint is string - endpoint path will be setted
-
-if endpoint is object
-
-```js
-{
-    title: 'short api description',
-    description: 'markdown description',
-    path: '/api/v0'
-}
-```
-
-
-
-
-### `init (app)`
-
-add http routes to express app
-
-return `Promise`
-
-
-## MethodObject
-
-
-```js
-{
-    title: null,         // short method description
-    description: null,   // full method description
-
-    // joi schemas for every part of request
-    schema: {
-        path: joi.object(),
-        query: joi.object(),
-        body: joi.object(),
-        cookies: joi.object(),
-        headers: joi.object()
-    },
-
-    responseTimeout: 500, // in ms
-
-    beforeMethodCreation: function (rawMethodObject, di) {
-        // here your can modify rawMethodObject schemas using di api object or etc
-    },
-
-    // express request handler function
-    handler: function (req, res) {
-
+        // no, set your own global send middleware
+        // Function or Function[]
+        // handled: [
+        //     (req, res, next) => {}
+        // ]
     }
 }
-```
 
-**example**
-
-```js
-rest.addMethod('GET /test', {
-    title: null,
-    description: null,
-    schema: {
-        // ...
+// global middlewares
+{
+    // not found middleware
+    notFound(req, res, next) {
+        // send 404
     },
-    handler: function (req, res) {
 
+    // send middleware
+    send(error, req, res, next) => {
+        if (error === 'send') {
+            // send res.ctx
+        }
+        next();
+    },
+
+    error(error, req, res, next) {
+        // log error
+        // send 500
     }
-});
+
+}
 ```
-
-you can use short notation for MethodObject - only handler function
-
-```js
-rest.addMethod('GET /test', function (req, res) {
-    // ...
-});
-```
-
-
-## HttpError
-
-
-### error codes on method creation
-
-- `INVALID_HTTP_PARAM_OBJECT`
-- `INVALID_RESOURCE_OBJECT`
-- `INVALID_METHOD_OBJECT`
-- `INVALID_ARGS`
-
-
-### runtime error codes
-
-- `INVALID_ARGS`
