@@ -3,39 +3,39 @@ module.exports = {
     //     this.httpContext.time.start = new Date();
     // },
 
-    requestEnd(/* next */) {
-        if (this.ctx.time.end) {
+    requestEnd(res /* , next */) {
+        if (res.ctx.time.end) {
             return;
         }
 
-        const {start} = this.ctx.time;
+        const {start} = res.ctx.time;
         const end = new Date();
 
-        this.ctx.time.end = end;
+        res.ctx.time.end = end;
 
-        this.ctx.time.total = end.getTime() - start.getTime();
+        res.ctx.time.total = end.getTime() - start.getTime();
     },
 
-    time(next, name) {
+    time(res, next, name) {
         if (!name) {
             // TODO Error
             return;
         }
 
-        this.ctx.time[name] = new Date();
+        res.ctx.time[name] = new Date();
     },
 
-    timeEnd(next, name) {
-        if (!this.ctx.time[name]) {
+    timeEnd(res, next, name) {
+        if (!res.ctx.time[name]) {
             // TODO ERROR
             return;
         }
 
         const now = (new Date()).getTime();
 
-        const start = this.ctx.time[name].getTime();
+        const start = res.ctx.time[name].getTime();
 
-        this.ctx.time[name] = now - start;
+        res.ctx.time[name] = now - start;
     }
 
     // TODO check express and http.ServerResponse method conflicts

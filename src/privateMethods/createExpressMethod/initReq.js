@@ -7,7 +7,11 @@ module.exports = function createMiddlewareInitReq(logger, rawMethod, helpers) {
         req.ctx.routeName = `${rawMethod.http.method.toUpperCase()}${rawMethod.http.path}`;
 
         Object.keys(helpers).forEach((name) => {
-            req[name] = helpers[name].bind(req, next);
+            req[name] = (...rawArgs) => {
+                let helper = helpers[name];
+                let args = [req, ...rawArgs];
+                return helper(...args);
+            };
         });
 
         next();

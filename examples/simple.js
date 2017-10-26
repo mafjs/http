@@ -33,19 +33,32 @@ const http = new Http(logger, config);
 
 http.setEndpoint('/api');
 
-http.responseHelpers.result = function testHelper(next, data) {
-    this.ctx.status = 200;
+http.responseHelpers.result = function testHelper(res, next, data) {
+    res.ctx.status = 200;
 
     // this.ctx.headers['test'] = '100500';
 
-    this.ctx.body = {
+    res.ctx.body = {
         result: data
     };
 
     next('send');
 };
 
+http.responseHelpers.test = function testHelper1(res, next, data) {
+    res.ctx.status = 200;
+    res.ctx.body = {
+        test: data
+    };
+    next('send');
+};
+
 const methods = {
+    'GET /test': {
+        handler(req, res) {
+            res.test(1);
+        }
+    },
     'GET /test/:id': {
         onCreate: (method, di) => {
             method.schema.query = joi.object().required().keys({
@@ -70,7 +83,7 @@ const methods = {
 
         handler(req, res) {
             req.logger.info('GET /test');
-            res.result(100500);
+            res.result(req.query.id);
         }
     },
     'POST /test': {

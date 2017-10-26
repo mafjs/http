@@ -5,7 +5,11 @@ module.exports = function createMiddlewareInitRes(logger, helpers) {
         req.logger.trace('init response helpers');
 
         Object.keys(helpers).forEach((name) => {
-            res[name] = helpers[name].bind(res, next);
+            res[name] = (...rawArgs) => {
+                let helper = helpers[name];
+                let args = [res, next, ...rawArgs];
+                return helper(...args);
+            };
         });
 
         req.logger.trace('init res.send function');

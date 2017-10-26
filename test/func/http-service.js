@@ -27,8 +27,8 @@ module.exports = () => {
 
     http.setEndpoint('/api');
 
-    http.responseHelpers.sendCtx = function testHelper(next) {
-        this.ctx.headers['x-test'] = 'test-header-100500';
+    http.responseHelpers.sendCtx = function testHelper(res, next) {
+        res.ctx.headers['x-test'] = 'test-header-100500';
         next('send');
     };
 
